@@ -26,12 +26,42 @@ export default function Main() {
           <span>쿡앤쉐어</span>
         </div>
         <div className="nav-menu">
-          <a href="#">사용자 관리</a>
-          <a href="#">커뮤니티 관리</a>
-          <a href="#">레시피 관리</a>
-          <a href="#">동네재료 관리</a>
-          <a href="#">통계 관리</a>
-          <a href="#">카테고리 관리</a>
+          <div className="nav-item">
+            <a href="#">사용자 관리</a>
+            <div className="submenu">
+              <a href="#">회원 리스트</a>
+            </div>
+          </div>
+          <div className="nav-item">
+            <a href="#">레시피 관리</a>
+            <div className="submenu">
+              <a href="#">레시피 리스트</a>
+              <a href="#">통계</a>
+            </div>
+          </div>
+          <div className="nav-item">
+            <a href="#">커뮤니티 관리</a>
+            <div className="submenu">
+              <a href="#">게시글</a>
+              <a href="#">댓글</a>
+              <a href="#">신고내역</a>
+            </div>
+          </div>
+          <div className="nav-item">
+            <a href="#">동네주방 관리</a>
+            <div className="submenu">
+              <a href="#">판매</a>
+              <a href="#">구매</a>
+              <a href="#">신고관리</a>
+            </div>
+          </div>
+          <div className="nav-item">
+            <a href="#">통계 관리</a>
+            <div className="submenu">
+              <a href="#">사용자 통계</a>
+              <a href="#">레시피 통계</a>
+            </div>
+          </div>
         </div>
         <div className="logout">로그아웃</div>
       </div>
@@ -45,7 +75,9 @@ export default function Main() {
             <div key={i} className="card">
               <img src="/assets/sample.png" alt="sample" />
               <div>
-                <div className="card-title">건조 적당하고 겨울에 따뜻하게 맛있게 먹었어요! 예...</div>
+                <div className="card-title">
+                  건조 적당하고 겨울에 따뜻하게 맛있게 먹었어요! 예...
+                </div>
                 <div className="card-info">추천한식 | 12.28 20:00</div>
               </div>
             </div>
@@ -89,7 +121,9 @@ export default function Main() {
             <div key={i} className="card">
               <img src="/assets/sample.png" alt="sample" />
               <div>
-                <div className="card-title">숙취끝에 시들시들하던 저에게 한 줄기 빛...</div>
+                <div className="card-title">
+                  숙취끝에 시들시들하던 저에게 한 줄기 빛...
+                </div>
                 <div className="card-info">피로스타일 | 12.23 11:27</div>
               </div>
             </div>
