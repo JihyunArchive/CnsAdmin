@@ -1,0 +1,98 @@
+.main-container {
+  padding: 0 20px 20px 20px;
+  font-family: 'Arial', sans-serif;
+  background-color: #f7f8fa;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid #ddd;
+  background-color: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #2aa52a;          /* ✅ 초록색 지정 */
+  margin-left: 20px;
+  text-decoration: none;  /* ✅ 밑줄 제거 */
+}
+
+.logo:hover {
+  opacity: 0.9;
+}
+
+.logo-img {
+  width: 32px;
+  height: 32px;
+  margin-right: 8px;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 200px; 
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-item > a {
+  text-decoration: none;
+  color: #2aa52a;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.nav-item:hover > a {
+  background-color: #2aa52a;  
+  color: white;               
+}
+
+.submenu {
+  display: none;
+  position: absolute;
+  top: 30px;
+  left: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 10px;
+  z-index: 10;
+}
+
+.submenu a {
+  display: block;
+  padding: 6px 12px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.submenu a:hover {
+  background-color: #2aa52a;
+  color: white;
+}
+
+.nav-item:hover .submenu {
+  display: block;
+}
+
+.logout {
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+  margin-right: 20px;
+}

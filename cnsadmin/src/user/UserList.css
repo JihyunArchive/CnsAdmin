@@ -1,0 +1,109 @@
+.user-list-container {
+  background: #f7f8fa;
+  padding: 30px;
+  font-family: 'Arial', sans-serif;
+}
+
+.user-list-container h2 {
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.search-box {
+  position: relative;
+}
+
+.search-box input {
+  padding: 8px 30px 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #aaa;
+}
+
+.action-buttons button {
+  margin-left: 10px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button.block {
+  background-color: #2aa52a;
+  color: white;
+}
+
+button.unblock {
+  background-color: white;
+  color: #2aa52a;
+  border: 1px solid #2aa52a;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  margin-top: 10px;
+}
+
+.user-table th,
+.user-table td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+.buttons button {
+  margin: 0 5px;
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid #2aa52a;
+  border-radius: 5px;
+  color: #2aa52a;
+  background: white;
+  cursor: pointer;
+}
+
+.buttons button.edit {
+  color: #2aa52a;
+  background: white;
+}
+
+.buttons button.block {
+  color: white;
+  background: #2aa52a;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.pagination span {
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #333;
+}
+
+.pagination .active {
+  background-color: #2aa52a;
+  color: white;
+}
