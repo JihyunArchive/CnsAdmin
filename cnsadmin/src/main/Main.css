@@ -1,0 +1,113 @@
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
+.main-container {
+  padding: 0 20px 20px 20px;
+  font-family: 'Arial', sans-serif;
+  background-color: #f7f8fa;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid #ddd;
+  background-color: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #2aa52a;
+  margin-left: 20px;
+}
+
+.logo-img {
+  width: 32px;
+  height: 32px;
+  margin-right: 8px;
+}
+
+.nav-menu a {
+  margin: 0 70px;
+  text-decoration: none;
+  color: #2aa52a;
+  font-weight: 500;
+}
+
+.logout {
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.welcome {
+  margin: 10px 0 10px;
+  font-size: 20px;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 30px;
+}
+
+.box {
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+}
+
+.card {
+  display: flex;
+  align-items: flex-start;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 12px;
+  background-color: #fefefe;
+  box-shadow: 0 0 3px rgba(0,0,0,0.08);
+}
+
+.card img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 10px;
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.card-info {
+  font-size: 12px;
+  color: #999;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.tabs button {
+  padding: 6px 12px;
+  background-color: #eee;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
