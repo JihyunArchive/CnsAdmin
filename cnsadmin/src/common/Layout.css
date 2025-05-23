@@ -21,9 +21,9 @@
   align-items: center;
   font-size: 24px;
   font-weight: bold;
-  color: #2aa52a;          /* ✅ 초록색 지정 */
-  margin-left: 20px;
-  text-decoration: none;  /* ✅ 밑줄 제거 */
+  color: #2aa52a;          
+  margin-left: 15px;
+  text-decoration: none; 
 }
 
 .logo:hover {
@@ -38,7 +38,7 @@
 
 .nav-menu {
   display: flex;
-  gap: 200px; 
+  gap: 100px; 
 }
 
 .nav-item {
@@ -49,7 +49,7 @@
   text-decoration: none;
   color: #2aa52a;
   font-weight: 500;
-  padding: 8px 16px;
+  padding: 8px 10px;
   border-radius: 4px;
   transition: all 0.2s ease;
 }
