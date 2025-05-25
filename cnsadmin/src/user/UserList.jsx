@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./UserList.css";
 
 export default function UserList() {
-  const users = Array(12).fill({
-    number: 30,
-    name: "정여진",
-    username: "1112jyjin"
-  });
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    // 🔹 임시 더미 유저 3명 세팅
+    setUsers([
+      { number: 1, name: "정여진", username: "jyjin1112" },
+      { number: 2, name: "김민수", username: "kms2025" },
+      { number: 3, name: "박지은", username: "jepark88" }
+    ]);
+  }, []);
 
   return (
     <div className="user-list-container">
@@ -52,8 +57,8 @@ export default function UserList() {
 
       <div className="pagination">
         <span>{"<"}</span>
-        {[...Array(10)].map((_, i) => (
-          <span key={i} className={i === 0 ? "active" : ""}>{i + 1}</span>
+        {[...Array(1)].map((_, i) => (
+          <span key={i} className="active">{i + 1}</span>
         ))}
         <span>{">"}</span>
       </div>

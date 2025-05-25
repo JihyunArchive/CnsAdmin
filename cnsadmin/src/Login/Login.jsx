@@ -1,4 +1,6 @@
+// src/Login/Login.jsx
 import React from "react";
+import "./Login.css"; // ✅ 반드시 포함!
 
 function Login(props) {
   console.log("🔥 props 확인:", props); // 이 줄 꼭 남겨줘
