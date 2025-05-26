@@ -1,3 +1,8 @@
+body {
+  margin: 0;
+  background-color: #f7f8fa;
+}
+
 .user-list-container {
   background: #f7f8fa;
   padding: 30px;
@@ -35,23 +40,17 @@
 }
 
 .action-buttons button {
-  margin-left: 10px;
   padding: 8px 12px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
+  margin-right: 20px;
 }
 
 button.block {
   background-color: #2aa52a;
   color: white;
-}
-
-button.unblock {
-  background-color: white;
-  color: #2aa52a;
-  border: 1px solid #2aa52a;
 }
 
 .user-table {
@@ -77,11 +76,7 @@ button.unblock {
   color: #2aa52a;
   background: white;
   cursor: pointer;
-}
-
-.buttons button.edit {
-  color: #2aa52a;
-  background: white;
+  margin-left: 20px;
 }
 
 .buttons button.block {
@@ -90,11 +85,18 @@ button.unblock {
 }
 
 .pagination {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f7f8fa;
   display: flex;
   justify-content: center;
   gap: 8px;
-  margin-top: 20px;
+  padding: 10px 0;
+  z-index: 100;
 }
+
 
 .pagination span {
   padding: 6px 10px;
@@ -107,3 +109,69 @@ button.unblock {
   background-color: #2aa52a;
   color: white;
 }
+
+/* ✅ 모달 배경 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* ✅ 모달 박스 */
+.modal-box {
+  background: white;
+  padding: 30px;
+  width: 400px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.modal-box p {
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.modal-box textarea {
+  width: 100%;
+  height: 80px;
+  padding: 10px;
+  resize: none;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.modal-buttons .confirm {
+  background-color: #2aa52a;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.modal-buttons .cancel {
+  background-color: white;
+  color: #2aa52a;
+  padding: 8px 16px;
+  border: 1px solid #2aa52a;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+

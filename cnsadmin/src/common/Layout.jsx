@@ -17,6 +17,7 @@ export default function Layout() {
             <a href="#">사용자 관리</a>
             <div className="submenu">
               <Link to="/users">회원 리스트</Link>
+              <Link to="/users/blocked">차단된 사용자</Link>
             </div>
           </div>
           <div className="nav-item">

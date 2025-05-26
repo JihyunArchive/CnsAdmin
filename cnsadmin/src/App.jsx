@@ -5,12 +5,19 @@ import {
   Route,
   Navigate
 } from "react-router-dom";
+
 import Login from "./Login/Login";
 import Main from "./main/Main";
 import PostList from "./community/PostList";
 import PostDetail from "./community/PostDetail";
 import UserList from "./user/UserList";
+import UserDetail from "./user/UserDetail";
+import BlockedUserList from "./user/BlockedUserList"; 
 import Layout from "./common/Layout";
+import UserRecipe from "./user/UserRecipe";
+import UserPoint from "./user/UserPoint";
+import UserReview from "./user/UserReview"; 
+
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -18,7 +25,6 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        {/* 로그인 전에는 login 페이지만 보이게 */}
         {!isLoggedIn && (
           <>
             <Route path="/login" element={<Login onLogin={() => setIsLoggedIn(true)} />} />
@@ -26,16 +32,19 @@ export default function App() {
           </>
         )}
 
-        {/* 로그인 후에는 Layout 하위 라우팅 */}
         {isLoggedIn && (
           <>
             <Route path="/" element={<Layout />}>
               <Route index element={<Main />} />
               <Route path="users" element={<UserList />} />
+              <Route path="users/blocked" element={<BlockedUserList />} /> 
+              <Route path="users/:username" element={<UserDetail />} />
+              <Route path="users/:username/recipes" element={<UserRecipe />} />
               <Route path="posts" element={<PostList />} />
               <Route path="posts/:postId" element={<PostDetail />} />
+              <Route path="users/:username/points" element={<UserPoint />} />
+              <Route path="users/:username/reviews" element={<UserReview />} /> 
             </Route>
-            {/* 로그인된 상태에서 /login 접근하면 메인으로 보내기 */}
             <Route path="/login" element={<Navigate to="/" replace />} />
           </>
         )}
