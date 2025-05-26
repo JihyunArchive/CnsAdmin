@@ -7,6 +7,8 @@ import {
 } from "react-router-dom";
 import Login from "./Login/Login";
 import Main from "./main/Main";
+import PostList from "./community/PostList";
+import PostDetail from "./community/PostDetail";
 import UserList from "./user/UserList";
 import Layout from "./common/Layout";
 
@@ -30,6 +32,8 @@ export default function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Main />} />
               <Route path="users" element={<UserList />} />
+              <Route path="posts" element={<PostList />} />
+              <Route path="posts/:postId" element={<PostDetail />} />
             </Route>
             {/* 로그인된 상태에서 /login 접근하면 메인으로 보내기 */}
             <Route path="/login" element={<Navigate to="/" replace />} />

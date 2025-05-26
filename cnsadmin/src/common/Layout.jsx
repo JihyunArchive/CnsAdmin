@@ -29,9 +29,9 @@ export default function Layout() {
           <div className="nav-item">
             <a href="#">커뮤니티 관리</a>
             <div className="submenu">
-              <a href="#">게시글</a>
-              <a href="#">댓글</a>
-              <a href="#">신고내역</a>
+              <Link to="/posts">게시글</Link>  
+              <Link to="/comments">댓글</Link>  
+              <Link to="/reports">신고내역</Link>  
             </div>
           </div>
           <div className="nav-item">
