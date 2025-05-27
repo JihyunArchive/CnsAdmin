@@ -1,17 +1,27 @@
+// src/common/Layout.jsx
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import "./Layout.css";
 
-export default function Layout() {
+export default function Layout({ setIsLoggedIn }) {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);  // 🔑 상태 변경
+    navigate("/login");
+  };
+
   return (
     <>
       <div className="navbar">
         <div className="logo">
-            <Link to="/" className="logo">
-                <img src="/assets/logo.png" alt="logo" className="logo-img" />
-                <span>쿡앤쉐어</span>
-            </Link>
+          <Link to="/" className="logo">
+            <img src="/assets/logo.png" alt="logo" className="logo-img" />
+            <span>쿡앤쉐어</span>
+          </Link>
         </div>
+
         <div className="nav-menu">
           <div className="nav-item">
             <a href="#">사용자 관리</a>
@@ -30,9 +40,9 @@ export default function Layout() {
           <div className="nav-item">
             <a href="#">커뮤니티 관리</a>
             <div className="submenu">
-              <Link to="/posts">게시글</Link>  
-              <Link to="/comments">댓글</Link>  
-              <Link to="/reports">신고내역</Link>  
+              <Link to="/posts">게시글</Link>
+              <Link to="/comments">댓글</Link>
+              <Link to="/reports">신고내역</Link>
             </div>
           </div>
           <div className="nav-item">
@@ -51,7 +61,8 @@ export default function Layout() {
             </div>
           </div>
         </div>
-        <div className="logout">로그아웃</div>
+
+        <div className="logout" onClick={handleLogout}>로그아웃</div>
       </div>
 
       <div className="layout-content">

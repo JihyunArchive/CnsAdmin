@@ -1,0 +1,86 @@
+/* src/user/UserHistory.css */
+
+.user-history-container {
+  background: #f7f8fa;
+  padding: 30px;
+  font-family: 'Arial', sans-serif;
+}
+
+.user-history-container h2 {
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.history-tab {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 30px;
+}
+
+.history-tab button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  color: #888;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+
+.history-tab button.active {
+  color: black;
+  border-bottom: 2px solid black;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  margin-top: 10px;
+}
+
+.history-table th,
+.history-table td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.pagination span {
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #333;
+}
+
+.pagination .active {
+  background-color: #2aa52a;
+  color: white;
+}
+
+.view-button {
+  padding: 6px 10px;
+  border: 1px solid #2aa52a;
+  border-radius: 5px;
+  color: #2aa52a;
+  background: white;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.view-button:hover {
+  background-color: #2aa52a;
+  color: white;
+}

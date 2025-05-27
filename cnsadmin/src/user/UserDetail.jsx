@@ -65,7 +65,12 @@ export default function UserDetail() {
                 <th>거래 내역</th>
                 <td className="with-button">
                     {user.trades}
-                    <button className="view-button">보기</button>
+                    <button
+                    className="view-button"
+                    onClick={() => navigate(`/users/${user.username}/history`)} // ✅ 이동 경로 추가
+                    >
+                    보기
+                    </button>
                 </td>
                 </tr>
                 <tr>
