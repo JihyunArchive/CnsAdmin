@@ -56,8 +56,7 @@ export default function Layout({ setIsLoggedIn }) {
           <div className="nav-item">
             <a href="#">통계 관리</a>
             <div className="submenu">
-              <a href="#">사용자 통계</a>
-              <a href="#">레시피 통계</a>
+              <Link to="/recipe/stats">레시피 통계</Link> 
             </div>
           </div>
         </div>

@@ -19,6 +19,7 @@ import UserRecipe from "./user/UserRecipe";
 import UserPoint from "./user/UserPoint";
 import UserReview from "./user/UserReview"; 
 import UserHistory from "./user/UserHistory";
+import RecipeStats from "./stats/RecipeStats";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -64,6 +65,7 @@ export default function App() {
               <Route path="users/:username/history" element={<UserHistory />} />
               <Route path="posts" element={<PostList />} />
               <Route path="posts/:postId" element={<PostDetail />} />
+              <Route path="recipe/stats" element={<RecipeStats />} />
             </Route>
             <Route path="/login" element={<Navigate to="/" replace />} />
           </>

@@ -84,6 +84,7 @@
 .submenu a:hover {
   background-color: #2aa52a;
   color: white;
+  border-radius: 4px;
 }
 
 .nav-item:hover .submenu {
