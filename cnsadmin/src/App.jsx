@@ -20,6 +20,10 @@ import UserPoint from "./user/UserPoint";
 import UserReview from "./user/UserReview"; 
 import UserHistory from "./user/UserHistory";
 import RecipeStats from "./stats/RecipeStats";
+import TradeSaleList from "./trade/TradeSaleList";
+import TradePurchaseList from "./trade/TradePurchaseList";
+import TradeReportList from "./trade/TradeReportList";
+import TradeDetail from "./trade/TradeDetail";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -65,6 +69,10 @@ export default function App() {
               <Route path="users/:username/history" element={<UserHistory />} />
               <Route path="posts" element={<PostList />} />
               <Route path="posts/:postId" element={<PostDetail />} />
+              <Route path="trade/sales" element={<TradeSaleList />} />
+              <Route path="trade/purchase" element={<TradePurchaseList />} />
+              <Route path="trade/report" element={<TradeReportList />} />
+              <Route path="trade/:tradePostId" element={<TradeDetail />} />
               <Route path="recipe/stats" element={<RecipeStats />} />
             </Route>
             <Route path="/login" element={<Navigate to="/" replace />} />
