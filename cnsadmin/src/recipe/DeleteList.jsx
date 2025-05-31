@@ -73,13 +73,6 @@ export default function DeleteList() {
 
         <div className="top-bar">
           <div className="checkbox-wrapper">
-            <input
-              type="checkbox"
-              className="check"
-              checked={selectAll}
-              onChange={toggleSelectAll}
-            />
-            <label>전체</label>
           </div>
           <div className="search-box">
             <input type="text" placeholder="레시피 검색" />

@@ -6,6 +6,7 @@ import "./DeleteModal.css";
 export default function RecipeDetail() {
   const [activeTab, setActiveTab] = useState("판매");
   const [checkedItems, setCheckedItems] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedReview, setSelectedReview] = useState(null);
   const [deleteReason, setDeleteReason] = useState("");
@@ -105,11 +106,13 @@ const filteredReviews = reviews.filter(
   };
 
   const toggleSelectAll = () => {
-  const allIds = currentReviews.map((r) => r.number);
-  setCheckedItems(
-    checkedItems.length === allIds.length ? [] : allIds
-  );
-};
+    if (selectAll) {
+      setCheckedItems([]);
+    } else {
+      setCheckedItems(reviews.map((r) => r.number));
+    }
+    setSelectAll(!selectAll);
+  };
 
   const openModal = (review) => {
     setSelectedReview(review);
@@ -124,28 +127,37 @@ const filteredReviews = reviews.filter(
 
   const handleConfirmDelete = () => {
   if (selectedReview) {
-    // 단일 삭제 (모달에서 특정 리뷰 삭제)
-    setReviews((prev) =>
-      prev.filter((r) => r.number !== selectedReview.number)
-          .map((r, i) => ({ ...r, number: i + 1 }))
-    );
+    // 단일 삭제
+    setReviews((prev) => {
+      const updated = prev.filter((r) => r.number !== selectedReview.number);
+      return updated.map((r, i) => ({ ...r, number: i + 1 }));
+    });
     setCheckedItems((prev) => prev.filter((id) => id !== selectedReview.number));
-    closeModal();
-  } else if (checkedItems.length > 0) {
-    setReviews((prev) =>
-      prev.filter((r) => !checkedItems.includes(r.number))
-          .map((r, i) => ({ ...r, number: i + 1 }))
-    );
+  } else {
+    // 복수 삭제 확인
+    if (checkedItems.length > 5) {
+      const confirmBulk = window.confirm("정말 선택한 레시피들을 삭제하시겠습니까?");
+      if (!confirmBulk) {
+        closeModal();
+        return;
+      }
+    }
+
+    setReviews((prev) => {
+      const updated = prev.filter((r) => !checkedItems.includes(r.number));
+      return updated.map((r, i) => ({ ...r, number: i + 1 }));
+    });
     setCheckedItems([]);
-    closeModal();
+    setSelectAll(false);
   }
+
+  closeModal();
 };
 
 const handlePageClick = (pageNumber) => {
   setCurrentPage(pageNumber);
   setCheckedItems([]); // 페이지 이동 시 선택 초기화
 };
-
 
   return (
     <div className="recipe-detail-container">
@@ -248,14 +260,14 @@ const handlePageClick = (pageNumber) => {
           <>
         <div className="top-bar">
             <div className="checkbox-wrapper">
-              <input
-                type="checkbox"
-                className="check"
-                checked={checkedItems.length === currentReviews.length && currentReviews.length !== 0}
-                onChange={toggleSelectAll}
-              />
-              <label>전체</label>
-            </div>
+            <input
+              type="checkbox"
+              className="check"
+              checked={selectAll}
+              onChange={toggleSelectAll}
+            />
+            <label>전체</label>
+          </div>
 
             <div className="search-box-wrapper">
               <div className="search-box">

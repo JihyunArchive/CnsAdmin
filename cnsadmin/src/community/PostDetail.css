@@ -61,3 +61,47 @@
   margin-top: 105px;
   text-align: center;
 }
+
+.detail-comment-table {
+  width: 80%;
+  border-collapse: separate; 
+  border-spacing: 0 15px; 
+  background-color: white;
+  table-layout: fixed;
+  margin-top: 10px;
+  margin-left: 413px;
+}
+
+.detail-comment-table th {
+  background-color: #F0F1F5;
+  text-align: left;
+  padding: 15px;
+  width: 230px;
+  font-weight: bold;
+  color: #333;
+  border: 1px solid #D9D9D9;
+}
+
+.detail-comment-table td {
+  padding: 15px;
+  border: 1px solid #D9D9D9;
+  vertical-align: top;
+  color: #222;
+  word-break: break-word;
+}
+
+.comment-toggle-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.comment-toggle-button {
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 2px 5px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
