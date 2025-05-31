@@ -10,7 +10,17 @@ import {
 import Login from "./Login/Login";
 import Main from "./main/Main";
 import PostList from "./community/PostList";
+import DeletePostList from "./community/DeletePostList";
 import PostDetail from "./community/PostDetail";
+import CommentList from "./community/CommentList";
+import DeleteCommentList from "./community/DeleteCommentList";
+import ReportList from "./community/ReportList";
+import DeleteReportList from "./community/DeleteReportList";
+import RecipeList from "./recipe/RecipeList";
+import DeleteList from "./recipe/DeleteList";
+import RecipeDetail from "./recipe/RecipeDetail";
+import ReviewDetail from "./recipe/ReviewDetail";
+import ReviewDeleteList from "./recipe/ReviewDeleteList";
 import UserList from "./user/UserList";
 import UserDetail from "./user/UserDetail";
 import BlockedUserList from "./user/BlockedUserList"; 
@@ -68,7 +78,17 @@ export default function App() {
               <Route path="users/:username/reviews" element={<UserReview />} />
               <Route path="users/:username/history" element={<UserHistory />} />
               <Route path="posts" element={<PostList />} />
+              <Route path="dposts" element={<DeletePostList />} />
               <Route path="posts/:postId" element={<PostDetail />} />
+              <Route path="dcomments" element={<DeleteCommentList />} />
+              <Route path="comments" element={<CommentList />} />
+              <Route path="reports" element={<ReportList />} />
+              <Route path="dreports" element={<DeleteReportList />} />
+              <Route path="recipes" element={<RecipeList />} />
+              <Route path="deletes" element={<DeleteList />} />
+              <Route path="recipes/:postId/reviews/:reviewId" element={<ReviewDetail />} />
+              <Route path="recipes/:postId" element={<RecipeDetail />} />
+              <Route path="rdeletes" element={<ReviewDeleteList />} />
               <Route path="trade/sales" element={<TradeSaleList />} />
               <Route path="trade/purchase" element={<TradePurchaseList />} />
               <Route path="trade/report" element={<TradeReportList />} />

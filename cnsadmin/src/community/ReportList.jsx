@@ -1,43 +1,44 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./PostList.css";
+import "./ReportList.css";
 
-export default function PostList() {
+export default function ReportList() {
   const navigate = useNavigate();
 
-  const [posts, setPosts] = useState([
-    { number: 1, id: "john123", postcontent: "동해바다가 보고싶어서 펜션을 빌렸어요. 바베큐...", date: "2025-05-01" },
-    { number: 2, id: "emma_cook", postcontent: "가족 여행을 다녀왔는데 정말 힐링이었어요!", date: "2025-05-03" },
-    { number: 3, id: "david456", postcontent: "서울 야경을 보러 남산타워 다녀왔습니다.", date: "2025-05-04" },
-    { number: 4, id: "cookmaster01", postcontent: "강릉 커피거리 카페투어! 추천해요.", date: "2025-05-05" },
-    { number: 5, id: "foodie_lee", postcontent: "주말에 캠핑 다녀왔어요~ 날씨도 좋고 음식도 맛있고!", date: "2025-05-06" },
-    { number: 6, id: "chef_kim", postcontent: "여수 밤바다 감성 제대로 느끼고 왔어요.", date: "2025-05-07" },
-    { number: 7, id: "recipequeen", postcontent: "인천 차이나타운 먹방 투어 추천!", date: "2025-05-08" },
-    { number: 8, id: "kitchenhero", postcontent: "벚꽃 시즌에 진해 다녀왔어요~ 사진 대박!", date: "2025-05-09" },
-    { number: 9, id: "chef_sun", postcontent: "설악산 등산으로 체력 단련했습니다!", date: "2025-05-10" },
-    { number: 10, id: "ricegod", postcontent: "속초 대게찜 먹고 왔어요. 완전 강추!", date: "2025-05-11" },
-    { number: 11, id: "cooknara", postcontent: "제주도 우도 투어는 언제나 옳아요.", date: "2025-05-12" },
-    { number: 12, id: "kimfood", postcontent: "남해 다랭이 마을, 조용한 힐링 장소였어요.", date: "2025-05-13" }
+  const [reports, setReports] = useState([
+    { number: 1, id: "john123", content: "내 돈 45만원 뜯어간 놈임", date: "2025-05-01" },
+    { number: 2, id: "emma_cook", content: "물건 보내기로 해놓고 잠수탐", date: "2025-05-02" },
+    { number: 3, id: "david456", content: "물건 보내기는 무슨 돈 받고 잠수탐", date: "2025-05-03" },
+    { number: 4, id: "cookmaster01", content: "나한테 희망을 품어준 나쁜놈임", date: "2025-05-04" },
+    { number: 5, id: "foodie_lee", content: "연락 두절?? 차단 당함", date: "2025-05-05" },
+    { number: 6, id: "skylover", content: "먹튀를 해?? 차단을 해??", date: "2025-05-06" },
+    { number: 7, id: "travel_maniac", content: "그래놓고 내돈 45만원을 더 뜯을라고한 놈임", date: "2025-05-07" },
+    { number: 8, id: "mountain_hiker", content: "직거래 약속 어기고 잠수탐", date: "2025-05-08" },
+    { number: 9, id: "citysnapper", content: "반품 요청했더니 욕설함", date: "2025-05-09" },
+    { number: 10, id: "healing_trip", content: "구매자인 척 접근해서 사기 시도", date: "2025-05-10" },
+    { number: 11, id: "island_seeker", content: "주소 받고 도난신고까지 당함", date: "2025-05-11" },
+    { number: 12, id: "photo_jenny", content: "상품 설명과 다르게 불량품 옴", date: "2025-05-12" }
+  
   ]);
 
   const [checkedItems, setCheckedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 10;
+  const reportsPerPage = 10;
   const [isModalOpen, setModalOpen] = useState(false);
-  const [selectedPost, setSelectedPost] = useState(null);
+  const [selectedReport, setSelectedReport] = useState(null);
   const [deleteReason, setDeleteReason] = useState("");
 
-  const indexOfLast = currentPage * postsPerPage;
-  const indexOfFirst = indexOfLast - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirst, indexOfLast);
-  const totalPages = Math.ceil(posts.length / postsPerPage);
+  const indexOfLast = currentPage * reportsPerPage;
+  const indexOfFirst = indexOfLast - reportsPerPage;
+  const currentReports = reports.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(reports.length / reportsPerPage);
 
   const toggleSelectAll = () => {
     if (selectAll) {
       setCheckedItems([]);
     } else {
-      setCheckedItems(posts.map((p) => p.number));
+      setCheckedItems(reports.map((p) => p.number));
     }
     setSelectAll(!selectAll);
   };
@@ -48,24 +49,24 @@ export default function PostList() {
     );
   };
 
-  const openModal = (post) => {
-    setSelectedPost(post);
+  const openModal = (report) => {
+    setSelectedReport(report);
     setDeleteReason("");
     setModalOpen(true);
   };
 
   const closeModal = () => {
-    setSelectedPost(null);
+    setSelectedReport(null);
     setModalOpen(false);
   };
 
   const handleConfirmDelete = () => {
-    if (selectedPost) {
-      setPosts((prev) => prev.filter((p) => p.number !== selectedPost.number).map((p, i) => ({ ...p, number: i + 1 })));
-      setCheckedItems((prev) => prev.filter((id) => id !== selectedPost.number));
+    if (selectedReport) {
+      setReports((prev) => prev.filter((p) => p.number !== selectedReport.number).map((p, i) => ({ ...p, number: i + 1 })));
+      setCheckedItems((prev) => prev.filter((id) => id !== selectedReport.number));
     } else {
       if (checkedItems.length > 5 && !window.confirm("정말 선택한 게시물들을 삭제하시겠습니까?")) return;
-      setPosts((prev) => prev.filter((p) => !checkedItems.includes(p.number)).map((p, i) => ({ ...p, number: i + 1 })));
+      setReports((prev) => prev.filter((p) => !checkedItems.includes(p.number)).map((p, i) => ({ ...p, number: i + 1 })));
       setCheckedItems([]);
       setSelectAll(false);
     }
@@ -78,10 +79,10 @@ export default function PostList() {
   };
 
   return (
-    <div className="post-list-container">
+    <div className="report-list-container">
       <div className="white-box">
-        <h2>게시물 리스트</h2>
-        <hr className="post-divider" />
+        <h2>신고내역 리스트</h2>
+        <hr className="report-divider" />
 
         <div className="top-bar">
           <div className="checkbox-wrapper">
@@ -91,7 +92,7 @@ export default function PostList() {
 
           <div className="search-box-wrapper">
             <div className="search-box">
-              <input type="text" placeholder="게시물 검색" />
+              <input type="text" placeholder="신고내역 검색" />
               <span className="search-icon">🔍</span>
             </div>
           </div>
@@ -101,37 +102,35 @@ export default function PostList() {
           </div>
         </div>
 
-        <table className="post-table">
+        <table className="report-table">
           <thead>
             <tr>
               <th></th>
               <th>번호</th>
               <th>아이디</th>
               <th>내용</th>
-              <th>게시 날짜</th>
+              <th>신고 날짜</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {currentPosts.map((post) => (
-              <tr key={post.number}>
+            {currentReports.map((report) => (
+              <tr key={report.number}>
                 <td>
                   <input
                     type="checkbox"
                     className="check"
-                    checked={checkedItems.includes(post.number)}
-                    onChange={() => toggleItem(post.number)}
+                    checked={checkedItems.includes(report.number)}
+                    onChange={() => toggleItem(report.number)}
                   />
                 </td>
-                <td>{post.number}</td>
-                <td>{post.id}</td>
-                <td>{post.postcontent}</td>
-                <td>{post.date}</td>
+                <td>{report.number}</td>
+                <td>{report.id}</td>
+                <td>{report.content}</td>
+                <td>{report.date}</td>
                 <td className="buttons">
-                  <button className="delete" onClick={() => openModal(post)}>삭제</button>
-                  <button className="detailSee" onClick={() => navigate(`/posts/${post.number}`)}>
-                    상세보기
-                  </button>
+                  <button className="delete" onClick={() => openModal(report)}>삭제</button>
+                  <button className="detailSee" onClick={() => navigate(`/posts/${report.number}`)}>상세보기</button>
                 </td>
               </tr>
             ))}
@@ -156,7 +155,7 @@ export default function PostList() {
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <p>게시물을 삭제하시는 이유가 어떻게 되시나요?</p>
+            <p>댓글을 삭제하시는 이유가 어떻게 되시나요?</p>
             <textarea
               className="modal-textarea"
               placeholder="사유를 입력해주세요"

@@ -1,4 +1,4 @@
-.post-detail-container {
+.review-detail-container {
   background: #f7f8fa;
   padding: 30px;
   font-family: 'Arial', sans-serif;
@@ -9,7 +9,7 @@
   padding: 20px;
 }
 
-.post-detail-container h2 {
+.review-detail-container h2 {
   margin-bottom: 20px;
   font-size: 20px;
 }
@@ -60,4 +60,20 @@
 .button-wrapper {
   margin-top: 105px;
   text-align: center;
+}
+
+.edit-button {
+  background-color: #2aa52a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.edit-button:hover {
+  background-color: #239123;
 }
