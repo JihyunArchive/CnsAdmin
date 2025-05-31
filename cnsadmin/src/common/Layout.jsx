@@ -33,16 +33,20 @@ export default function Layout({ setIsLoggedIn }) {
           <div className="nav-item">
             <a href="#">레시피 관리</a>
             <div className="submenu">
-              <a href="#">레시피 리스트</a>
-              <a href="#">통계</a>
+              <Link to="/recipes">레시피 리스트</Link>
+              <Link to="/deletes">레시피 삭제 리스트</Link>
+              <Link to="/rdeletes">리뷰 삭제 리스트</Link>
             </div>
           </div>
           <div className="nav-item">
             <a href="#">커뮤니티 관리</a>
             <div className="submenu">
-              <Link to="/posts">게시글</Link>
-              <Link to="/comments">댓글</Link>
-              <Link to="/reports">신고내역</Link>
+              <Link to="/posts">게시글</Link>  
+              <Link to="/dposts">게시글 삭제 리스트</Link>  
+              <Link to="/comments">댓글</Link>  
+              <Link to="/dcomments">댓글 삭제 리스트</Link>  
+              <Link to="/reports">신고내역</Link>  
+              <Link to="/dreports">댓글 신고내역역 리스트</Link>  
             </div>
           </div>
           <div className="nav-item">

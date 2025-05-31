@@ -1,0 +1,258 @@
+.recipe-detail-container {
+  background: #f7f8fa;
+  padding: 30px;
+  font-family: 'Arial', sans-serif;
+}
+
+.white-box {
+  background-color: white;
+  padding: 20px;
+}
+
+.recipe-detail-container h2 {
+  margin-bottom: 20px;
+  font-size: 20px;
+  margin-left: 20px;
+}
+
+.detail-divider {
+  border: none;
+  width: 100%;
+  height: 3px;
+  background-color: #F3F5F7;
+  margin: 5px 0;
+}
+
+.detail-table {
+  width: 100%;
+  border-collapse: separate; 
+  border-spacing: 0 15px; 
+  background-color: white;
+  table-layout: fixed;
+  margin-top: 10px;
+}
+
+.detail-table th {
+  background-color: #F0F1F5;
+  text-align: left;
+  padding: 15px;
+  width: 230px;
+  font-weight: bold;
+  color: #333;
+  border: 1px solid #D9D9D9;
+}
+
+.detail-table td {
+  padding: 15px;
+  border: 1px solid #D9D9D9;
+  vertical-align: top;
+  color: #222;
+  word-break: break-word;
+}
+
+.detail-image {
+  padding: 5px;
+  width: 200px;
+  height: auto;
+  border-radius: 6px #D9D9D9;
+  object-fit: cover;
+}
+
+.button-wrapper {
+  margin-top: 105px;
+  text-align: center;
+}
+
+.section-title {
+  margin-top: 30px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.ingredient-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.ingredient-table td {
+  border: 1px solid #e0e0e0;
+  padding: 12px;
+  font-size: 16px;
+}
+
+.tab-wrapper {
+  display: flex;
+  position: relative;
+  margin-top: 19px;
+  height: 53px;
+}
+
+.tab {
+  position: absolute;
+  background: none;
+  border: none;
+  font-size: 19px;
+  padding-bottom: 23px;
+  cursor: pointer;
+  color: #888;
+  border-bottom: none; 
+}
+
+.tab-left {
+  left: 150px;
+}
+
+.tab-center {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tab-right {
+  right: 150px;
+}
+
+.tab.active {
+  color: #000;
+  font-weight: bold;
+  z-index: 1;
+}
+
+.tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px; /* ✅ 여기서 밑줄 길이 조절 (기존보다 넓게) */
+  border-bottom: 2px solid #000;
+}
+
+.tab-divider {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 0 0 10px 0;
+}
+
+.step-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.step-row {
+  display: grid;
+  grid-template-columns: 260px 1fr 1fr;
+  background-color: white;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 20px; 
+}
+
+.step-th {
+  background-color: #F0F1F5;
+  padding: 15px;
+  font-weight: bold;
+  color: #333;
+  border: 1px solid #D9D9D9;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  word-break: keep-all;
+}
+
+.step-td {
+  padding: 15px;
+  border: 1px solid #D9D9D9;
+  vertical-align: top;
+  color: #222;
+  word-break: break-word;
+}
+
+.step-image {
+  width: 180px;
+  height: auto;
+  object-fit: cover;
+}
+
+.step-text {
+  white-space: pre-line;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.review-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  margin-top: 10px;
+}
+
+.review-table thead tr {
+  background-color: #F3F5F7;
+}
+
+.review-table thead th {
+  color: #757575; 
+}
+
+.review-table th,
+.review-table td {
+  padding: 30px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+.buttons button {
+  margin: 0 5px;
+  padding: 6px 10px;
+  font-size: 16px;
+  border: 1px solid #2aa52a;
+  border-radius: 5px;
+  color: #2aa52a;
+  background: white;
+  cursor: pointer;
+}
+
+.buttons button.delete {
+  color: #2aa52a;
+  background: white;
+}
+
+.buttons button.detailSee {
+  color: white;
+  background: #2aa52a;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.pagination span {
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #333;
+}
+
+.pagination .active {
+  background-color: #2aa52a;
+  color: white;
+}
+
+.delete-button-wrapper {
+  margin-right: 20px;
+}
+
+.top-delete-button {
+  padding: 8px 14px;
+  background-color: #2aa52a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}

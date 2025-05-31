@@ -48,10 +48,6 @@ export default function PostDetail() {
         </tbody>
       </table>
 
-        <div className="button-wrapper">
-            <button className="edit-button">정보수정</button>
-            </div>
-
     </div>
     </div>
   );
