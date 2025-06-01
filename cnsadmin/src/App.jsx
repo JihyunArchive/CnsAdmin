@@ -72,11 +72,11 @@ export default function App() {
               <Route index element={<Main />} />
               <Route path="users" element={<UserList />} />
               <Route path="users/blocked" element={<BlockedUserList />} /> 
-              <Route path="users/:username" element={<UserDetail />} />
-              <Route path="users/:username/recipes" element={<UserRecipe />} />
-              <Route path="users/:username/points" element={<UserPoint />} />
-              <Route path="users/:username/reviews" element={<UserReview />} />
-              <Route path="users/:username/history" element={<UserHistory />} />
+              <Route path="users/:userId" element={<UserDetail />} />
+              <Route path="users/:userId/recipes" element={<UserRecipe />} />
+              <Route path="users/:userId/points" element={<UserPoint />} />
+              <Route path="users/:userId/reviews" element={<UserReview />} />
+              <Route path="users/:userId/history" element={<UserHistory />} />
               <Route path="posts" element={<PostList />} />
               <Route path="dposts" element={<DeletePostList />} />
               <Route path="posts/:postId" element={<PostDetail />} />

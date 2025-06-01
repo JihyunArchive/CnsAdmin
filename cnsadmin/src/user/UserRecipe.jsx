@@ -2,24 +2,39 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./UserRecipe.css";
+import axios from "axios";
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function UserRecipe() {
-  const { username } = useParams();
+  const { userId } = useParams(); // ✅ userId로 받기
   const [recipes, setRecipes] = useState([]);
 
   useEffect(() => {
-    // ✅ 실제 API 호출이 들어갈 자리
-    // 예: fetch(`/api/recipes?username=${username}`).then(...)
-    setRecipes(
-      Array.from({ length: 12 }, (_, i) => ({
-        id: i + 1,
-        number: 30,
-        username: username,
-        title: "알배추찜곁과 구운 두부 버섯 샐러드",
-        date: "2025-05-01"
-      }))
-    );
-  }, [username]);
+    const fetchRecipes = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/admin/users/${userId}/recipes`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        const recipeList = res.data.map((item, index) => ({
+          id: index + 1,
+          number: res.data.length - index, // 내림차순 번호
+          username: item.username,
+          title: item.title,
+          date: item.createdAt?.replace("T", " ").substring(0, 16),
+        }));
+
+        setRecipes(recipeList);
+      } catch (err) {
+        console.error("❌ 레시피 불러오기 실패:", err);
+      }
+    };
+
+    fetchRecipes();
+  }, [userId]);
 
   return (
     <div className="user-recipe-container">

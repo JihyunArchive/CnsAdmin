@@ -1,21 +1,41 @@
 import React, { useEffect, useState } from "react";
 import "./UserList.css";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function UserList() {
   const [users, setUsers] = useState([]);
   const [showModal, setShowModal] = useState(false); // 🔹 모달 표시 여부
   const [blockReason, setBlockReason] = useState(""); // 🔹 사유 입력값
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setUsers([
-      { number: 1, name: "정여진", username: "jyjin1112" },
-      { number: 2, name: "김민수", username: "kms2025" },
-      { number: 3, name: "박지은", username: "jepark88" }
-    ]);
-  }, []);
+useEffect(() => {
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/admin/users?page=0&size=10`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
+console.log("유저 리스트 응답:", response.data.content);
+      const userList = response.data.content.map((user, index) => ({
+        id: user.id,
+        number: index + 1 + response.data.pageable.offset, // 실제 페이지 번호
+        name: user.name,
+        username: user.username
+      }));
+
+      setUsers(userList);
+    } catch (error) {
+      console.error("회원 목록 불러오기 실패:", error);
+    }
+  };
+
+  fetchUsers();
+}, [BASE_URL]);
+
 
   const handleBlockClick = () => {
     setShowModal(true);
@@ -66,7 +86,7 @@ export default function UserList() {
               <td>{user.name}</td>
               <td>{user.username}</td>
               <td className="buttons">
-                <button className="block" onClick={() => navigate(`/users/${user.username}`)}>
+                <button className="block" onClick={() => navigate(`/users/${user.id}`)}>
                   상세보기
                 </button>
               </td>
