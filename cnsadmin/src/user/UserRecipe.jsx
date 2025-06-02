@@ -3,12 +3,15 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./UserRecipe.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function UserRecipe() {
   const { userId } = useParams(); // ✅ userId로 받기
   const [recipes, setRecipes] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -56,18 +59,25 @@ export default function UserRecipe() {
           </tr>
         </thead>
         <tbody>
-          {recipes.map((recipe) => (
-            <tr key={recipe.id}>
-              <td>{recipe.number}</td>
-              <td>{recipe.username}</td>
-              <td>{recipe.title}</td>
-              <td>{recipe.date}</td>
-              <td className="buttons">
-                <button className="view-button">보기</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+      {recipes.map((recipe) => (
+        <tr key={recipe.id}>
+          <td>{recipe.number}</td>
+          <td>{recipe.username}</td>
+          <td>{recipe.title}</td>
+          <td>{recipe.date}</td>
+          <td className="buttons">
+            <button
+              className="view-button"
+              onClick={() =>
+                navigate(`/admin/users/${userId}/recipes/${recipe.id}`)
+              }
+            >
+              보기
+            </button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
       </table>
 
       <div className="pagination">

@@ -34,6 +34,9 @@ import TradeSaleList from "./trade/TradeSaleList";
 import TradePurchaseList from "./trade/TradePurchaseList";
 import TradeReportList from "./trade/TradeReportList";
 import TradeDetail from "./trade/TradeDetail";
+import UserRecipeDetail from "./user/UserRecipeDetail";
+import UserHistoryPurchase from "./user/UserHistoryPurchase";
+import UserHistorySale from "./user/UserHistorySale";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -94,6 +97,9 @@ export default function App() {
               <Route path="trade/report" element={<TradeReportList />} />
               <Route path="trade/:tradePostId" element={<TradeDetail />} />
               <Route path="recipe/stats" element={<RecipeStats />} />
+              <Route path="/admin/users/:userId/recipes/:recipeId" element={<UserRecipeDetail />} />
+              <Route path="/admin/user-history/purchase/:tradePostId" element={<UserHistoryPurchase />} />
+              <Route path="/admin/user-history/sale/:tradePostId" element={<UserHistorySale />} />
             </Route>
             <Route path="/login" element={<Navigate to="/" replace />} />
           </>
