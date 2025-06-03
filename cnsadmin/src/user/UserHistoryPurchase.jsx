@@ -1,4 +1,3 @@
-// UserHistoryPurchase.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
@@ -9,12 +8,17 @@ export default function UserHistoryPurchase() {
   const [post, setPost] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
-    axios.get(`/api/admin/tradeposts/${tradePostId}`)
-      .then((res) => setPost(res.data))
-      .catch(() => setPost(null));
-  }, [tradePostId]);
+    axios.get(`${BASE_URL}/admin/tradeposts/${tradePostId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    })
+    .then((res) => setPost(res.data))
+    .catch(() => setPost(null));
+  }, [tradePostId, BASE_URL]);
 
   if (!post) {
     return <div className="post-detail-container">해당 게시글을 찾을 수 없습니다.</div>;

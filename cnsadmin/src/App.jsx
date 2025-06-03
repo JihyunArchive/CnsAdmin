@@ -49,7 +49,7 @@ export default function App() {
         if (payload.role === "ROLE_ADMIN") {
           setIsLoggedIn(true);
         } else {
-          console.warn("일반 유저는 관리자 페이지에 접근할 수 없습니다");
+          console.warn("일반 유저는 관리자 페이지에 접극할 수 없습니다");
           localStorage.removeItem("token");
         }
       } catch (e) {
@@ -73,8 +73,8 @@ export default function App() {
           <>
             <Route path="/" element={<Layout setIsLoggedIn={setIsLoggedIn} />}>
               <Route index element={<Main />} />
-              <Route path="users" element={<UserList />} />
               <Route path="users/blocked" element={<BlockedUserList />} /> 
+              <Route path="users" element={<UserList />} />
               <Route path="users/:userId" element={<UserDetail />} />
               <Route path="users/:userId/recipes" element={<UserRecipe />} />
               <Route path="users/:userId/points" element={<UserPoint />} />
@@ -97,9 +97,11 @@ export default function App() {
               <Route path="trade/report" element={<TradeReportList />} />
               <Route path="trade/:tradePostId" element={<TradeDetail />} />
               <Route path="recipe/stats" element={<RecipeStats />} />
-              <Route path="/admin/users/:userId/recipes/:recipeId" element={<UserRecipeDetail />} />
-              <Route path="/admin/user-history/purchase/:tradePostId" element={<UserHistoryPurchase />} />
-              <Route path="/admin/user-history/sale/:tradePostId" element={<UserHistorySale />} />
+              <Route path="admin/recipes/:recipeId" element={<UserRecipeDetail />} />
+              <Route path="admin/users/:userId/recipes/:recipeId" element={<UserRecipeDetail />} />
+              <Route path="admin/user-history/purchase/:tradePostId" element={<UserHistoryPurchase />} />
+              <Route path="admin/user-history/sale/:tradePostId" element={<UserHistorySale />} />
+              <Route path="admin/user-history/:userId" element={<UserHistory />} />
             </Route>
             <Route path="/login" element={<Navigate to="/" replace />} />
           </>

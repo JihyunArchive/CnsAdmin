@@ -1,20 +1,41 @@
-// src/user/UserPoint.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./UserPoint.css";
+import axios from "axios";
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function UserPoint() {
-  const { username } = useParams();
-  console.log("현재 유저:", username);
-  const [tab, setTab] = useState("saved");
+  const { userId } = useParams(); // ✅ userId 기준으로 수정
+  const [tab, setTab] = useState("saved"); // saved = 적립, used = 사용
+  const [points, setPoints] = useState([]);
 
-  const pointList = Array.from({ length: 12 }, (_, i) => ({
-    id: i + 1,
-    type: tab === "saved" ? "커뮤니티 글 작성" : "레시피 열람",
-    point: tab === "saved" ? "3p" : "-5p",
-    date: "2025-05-01",
-    number: 30
-  }));
+  useEffect(() => {
+    const fetchPoints = async () => {
+      try {
+        const url = `${BASE_URL}/admin/users/${userId}/points/${tab === "saved" ? "earned" : "used"}`;
+        const res = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        const pointList = res.data.map((item, index) => ({
+          id: item.id,
+          number: res.data.length - index,
+          type: item.description,
+          point: `${item.pointChange > 0 ? "+" : ""}${item.pointChange}p`,
+          date: item.createdAt.replace("T", " ").substring(0, 16),
+        }));
+
+        setPoints(pointList);
+      } catch (err) {
+        console.error("❌ 포인트 내역 불러오기 실패:", err);
+      }
+    };
+
+    fetchPoints();
+  }, [userId, tab]);
 
   return (
     <div className="user-point-container">
@@ -35,7 +56,7 @@ export default function UserPoint() {
           </tr>
         </thead>
         <tbody>
-          {pointList.map((item) => (
+          {points.map((item) => (
             <tr key={item.id}>
               <td>{item.number}</td>
               <td>{item.type}</td>
@@ -49,7 +70,7 @@ export default function UserPoint() {
       <div className="pagination">
         <span>{"<"}</span>
         <span className="active">1</span>
-        <span>2</span>
+        <span>1</span>
         <span>{">"}</span>
       </div>
     </div>
