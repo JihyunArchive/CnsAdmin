@@ -163,11 +163,8 @@ export default function Main() {
               <div key={i} className="card">
                 <img src="/assets/sample.png" alt="board" />
                 <div>
-                  <div className="card-title">
-                    {board.title && board.title.length > 30
-                      ? board.title.substring(0, 30) + "..."
-                      : board.title || "(제목 없음)"}
-                  </div>
+                  {/* 제목 제거하고, 내용 표시 */}
+                  <div className="card-content">{board.content}</div>
                   <div className="card-info">
                     {board.username ?? "작성자 없음"} |{" "}
                     {board.createdAt?.substring(5, 16).replace("T", " ") ?? "날짜 없음"}
