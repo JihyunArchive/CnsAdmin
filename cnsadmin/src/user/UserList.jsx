@@ -8,13 +8,19 @@ export default function UserList() {
   const [checkedItems, setCheckedItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [blockReason, setBlockReason] = useState("");
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const [keyword, setKeyword] = useState("");
 
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const navigate = useNavigate();
 
   const fetchUsers = useCallback(async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/admin/users?page=0&size=10`, {
+      const response = await axios.get(`${BASE_URL}/admin/users/search`, {
+        params: {
+          keyword: keyword,
+          page: 0,
+          size: 10,
+        },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -31,7 +37,7 @@ export default function UserList() {
     } catch (error) {
       console.error("회원 목록 불러오기 실패:", error);
     }
-  }, [BASE_URL]);
+  }, [BASE_URL, keyword]);
 
   useEffect(() => {
     fetchUsers();
@@ -62,7 +68,8 @@ export default function UserList() {
   const handleConfirm = async () => {
     try {
       for (const userId of checkedItems) {
-        await axios.post(`${BASE_URL}/admin/users/${userId}/block`,
+        await axios.post(
+          `${BASE_URL}/admin/users/${userId}/block`,
           { reason: blockReason },
           {
             headers: {
@@ -76,7 +83,7 @@ export default function UserList() {
       setCheckedItems([]);
       setBlockReason("");
       setShowModal(false);
-      fetchUsers(); // ✅ 차단 후 자동 새로고침
+      fetchUsers(); // ✅ 차단 후 새로고침
     } catch (err) {
       console.error("차단 실패:", err);
       alert("차단 처리 중 오류가 발생했습니다.");
@@ -94,21 +101,44 @@ export default function UserList() {
 
       <div className="top-bar">
         <label>
-          <input type="checkbox" onChange={handleCheckAll} checked={checkedItems.length === users.length} /> 전체
+          <input
+            type="checkbox"
+            onChange={handleCheckAll}
+            checked={checkedItems.length === users.length && users.length > 0}
+          />{" "}
+          전체
         </label>
         <div className="search-box">
-          <input type="text" placeholder="회원 검색" />
-          <span className="search-icon">🔍</span>
+          <input
+            type="text"
+            placeholder="회원 검색"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") fetchUsers();
+            }}
+          />
+          <span className="search-icon" onClick={fetchUsers}>
+            🔍
+          </span>
         </div>
         <div className="action-buttons">
-          <button className="block" onClick={handleBlockClick}>차단</button>
+          <button className="block" onClick={handleBlockClick}>
+            차단
+          </button>
         </div>
       </div>
 
       <table className="user-table">
         <thead>
           <tr>
-            <th><input type="checkbox" onChange={handleCheckAll} checked={checkedItems.length === users.length} /></th>
+            <th>
+              <input
+                type="checkbox"
+                onChange={handleCheckAll}
+                checked={checkedItems.length === users.length && users.length > 0}
+              />
+            </th>
             <th>번호</th>
             <th>이름</th>
             <th>아이디</th>
@@ -118,12 +148,21 @@ export default function UserList() {
         <tbody>
           {users.map((user) => (
             <tr key={user.id}>
-              <td><input type="checkbox" checked={checkedItems.includes(user.id)} onChange={() => handleCheck(user.id)} /></td>
+              <td>
+                <input
+                  type="checkbox"
+                  checked={checkedItems.includes(user.id)}
+                  onChange={() => handleCheck(user.id)}
+                />
+              </td>
               <td>{user.number}</td>
               <td>{user.name}</td>
               <td>{user.username}</td>
               <td className="buttons">
-                <button className="block" onClick={() => navigate(`/users/${user.id}`)}>
+                <button
+                  className="block"
+                  onClick={() => navigate(`/users/${user.id}`)}
+                >
                   상세보기
                 </button>
               </td>
@@ -148,8 +187,12 @@ export default function UserList() {
               placeholder="예: 욕설이 너무 심함"
             />
             <div className="modal-buttons">
-              <button className="confirm" onClick={handleConfirm}>확인</button>
-              <button className="cancel" onClick={handleCancel}>취소</button>
+              <button className="confirm" onClick={handleConfirm}>
+                확인
+              </button>
+              <button className="cancel" onClick={handleCancel}>
+                취소
+              </button>
             </div>
           </div>
         </div>
