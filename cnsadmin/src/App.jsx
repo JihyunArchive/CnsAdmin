@@ -31,7 +31,6 @@ import UserReview from "./user/UserReview";
 import UserHistory from "./user/UserHistory";
 import RecipeStats from "./stats/RecipeStats";
 import TradeSaleList from "./trade/TradeSaleList";
-import TradePurchaseList from "./trade/TradePurchaseList";
 import TradeReportList from "./trade/TradeReportList";
 import TradeDetail from "./trade/TradeDetail";
 import UserRecipeDetail from "./user/UserRecipeDetail";
@@ -93,9 +92,8 @@ export default function App() {
               <Route path="recipes/:postId" element={<RecipeDetail />} />
               <Route path="rdeletes" element={<ReviewDeleteList />} />
               <Route path="trade/sales" element={<TradeSaleList />} />
-              <Route path="trade/purchase" element={<TradePurchaseList />} />
               <Route path="trade/report" element={<TradeReportList />} />
-              <Route path="trade/:tradePostId" element={<TradeDetail />} />
+              <Route path="admin/tradeposts/:tradePostId" element={<TradeDetail />} />
               <Route path="recipe/stats" element={<RecipeStats />} />
               <Route path="admin/recipes/:recipeId" element={<UserRecipeDetail />} />
               <Route path="admin/users/:userId/recipes/:recipeId" element={<UserRecipeDetail />} />

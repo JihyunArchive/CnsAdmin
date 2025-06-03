@@ -1,3 +1,5 @@
+/* 신고내역 리스트 */
+
 import React, { useEffect, useState } from "react";
 import "./TradeReportList.css";
 import { useNavigate } from "react-router-dom";

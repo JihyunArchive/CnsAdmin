@@ -52,8 +52,7 @@ export default function Layout({ setIsLoggedIn }) {
           <div className="nav-item">
             <a href="#">동네주방 관리</a>
             <div className="submenu">
-              <Link to="/trade/sales">판매</Link>
-              <Link to="/trade/purchase">구매</Link>
+              <Link to="/trade/sales">거래글</Link>
               <Link to="/trade/report">신고관리</Link>
             </div>
           </div>

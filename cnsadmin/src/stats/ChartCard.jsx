@@ -40,7 +40,7 @@ export default function ChartCard({ chartData, xAxisLabel = "(일)" }) {
           maxRotation: 45,
           minRotation: 20,
           autoSkip: true,
-          maxTicksLimit: 12, // 라벨 과밀 방지
+          maxTicksLimit: 12,
         },
       },
       y: {
@@ -53,7 +53,7 @@ export default function ChartCard({ chartData, xAxisLabel = "(일)" }) {
           },
         },
         ticks: {
-          precision: 0, // 소수점 없이 정수로
+          precision: 0, // 소수점 없이 정수만
         },
       },
     },

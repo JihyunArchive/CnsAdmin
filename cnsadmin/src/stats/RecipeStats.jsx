@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/axiosInstance";
 import ChartCard from "./ChartCard";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -23,47 +23,49 @@ export default function RecipeStats() {
   const fetchStats = async () => {
     try {
       let response;
-      let path = "";
-      if (selectedTab === "날짜별") path = "recipes";
-      else if (selectedTab === "찜별") path = "likes";
-      else if (selectedTab === "추천별") path = "recommends";
-      else if (selectedTab === "공유별") path = "shares";
+      let endpoint = "/admin/stats/recipes";
+
+      if (selectedTab === "찜별") endpoint += "/likes";
+      else if (selectedTab === "추천별") endpoint += "/recommends";
+      else if (selectedTab === "공유별") endpoint += "/shares";
 
       if (tabsWithDateFilter.includes(selectedTab)) {
         if (dateFilterType === "기간" && startDate && endDate) {
           const diffDays = (endDate - startDate) / (1000 * 60 * 60 * 24);
-          if (diffDays > 60) {
-            response = await axios.get(`/api/stats/${path}/monthly`, {
-              params: {
-                start: startDate.toISOString().split("T")[0],
-                end: endDate.toISOString().split("T")[0],
-              },
-            });
-          } else {
-            response = await axios.get(`/api/stats/${path}/daily`, {
-              params: {
-                start: startDate.toISOString().split("T")[0],
-                end: endDate.toISOString().split("T")[0],
-              },
-            });
-          }
+          const type = diffDays > 60 ? "MONTHLY" : "DAILY";
+
+          response = await api.get(endpoint, {
+            params: {
+              type,
+              start: startDate.toISOString().split("T")[0],
+              end: endDate.toISOString().split("T")[0],
+            },
+          });
         } else if (dateFilterType === "연도") {
-          response = await axios.get(`/api/stats/${path}/yearly`, {
-            params: { year },
+          response = await api.get(endpoint, {
+            params: { type: "YEARLY", year },
           });
         } else if (dateFilterType === "월") {
-          response = await axios.get(`/api/stats/${path}/monthly`, {
-            params: { year, month },
+          response = await api.get(endpoint, {
+            params: { type: "MONTHLY", year, month },
           });
         }
       } else if (selectedTab === "카테고리별") {
-        response = await axios.get(`/api/stats/recipes/category`, {
-          params: { category: selectedCategory },
-        });
+        response = await api.get("/admin/stats/recipes/categories");
       }
 
-      if (response && response.data) {
-        const { data, summary } = response.data;
+      console.log("✅ 백엔드 응답 데이터:", response?.data);
+
+      const rawData = response?.data;
+
+      if (typeof rawData !== "object") {
+        throw new Error("⚠️ JSON 형식이 아님 (HTML 페이지일 수 있음)");
+      }
+
+      const data = Array.isArray(rawData) ? rawData : rawData.data;
+      const summary = rawData.summary;
+
+      if (Array.isArray(data)) {
         const labels = data.map((item) => item.label || item.date || item.month);
         const counts = data.map((item) => item.count);
 
@@ -82,10 +84,19 @@ export default function RecipeStats() {
           ],
         });
 
-        if (summary) setSummaryStats(summary);
+        if (summary) {
+          setSummaryStats(summary);
+        } else {
+          setSummaryStats({
+            total: counts.reduce((a, b) => a + b, 0),
+            average: counts.length > 0 ? (counts.reduce((a, b) => a + b, 0) / counts.length).toFixed(2) : 0,
+            max: Math.max(...counts, 0),
+            min: Math.min(...counts, 0),
+          });
+        }
       }
     } catch (err) {
-      console.error("레시피 통계 조회 실패:", err);
+      console.error("❌ 레시피 통계 조회 실패:", err);
     }
   };
 
@@ -132,7 +143,7 @@ export default function RecipeStats() {
 
             {dateFilterType === "연도" && (
               <select value={year} onChange={(e) => setYear(Number(e.target.value))}>
-                {[2025, 2024, 2023, 2022, 2021, 2020].map((y) => (
+                {[2025, 2024, 2023, 2022, 2021].map((y) => (
                   <option key={y} value={y}>
                     {y}년
                   </option>
@@ -143,7 +154,7 @@ export default function RecipeStats() {
             {dateFilterType === "월" && (
               <>
                 <select value={year} onChange={(e) => setYear(Number(e.target.value))}>
-                  {[2025, 2024, 2023, 2022, 2021, 2020].map((y) => (
+                  {[2025, 2024, 2023, 2022, 2021].map((y) => (
                     <option key={y} value={y}>
                       {y}년
                     </option>
@@ -189,7 +200,8 @@ export default function RecipeStats() {
         xAxisLabel={
           dateFilterType === "연도"
             ? "(연도)"
-            : dateFilterType === "월" || (startDate && endDate && (endDate - startDate) / (1000 * 60 * 60 * 24) > 60)
+            : dateFilterType === "월" ||
+              (startDate && endDate && (endDate - startDate) / (1000 * 60 * 60 * 24) > 60)
             ? "(월)"
             : "(일)"
         }
