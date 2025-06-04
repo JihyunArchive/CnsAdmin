@@ -1,25 +1,14 @@
-import React, { useState } from "react";
+// src/pages/PostList.jsx
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../api/axiosInstance";
 import "./PostList.css";
+import "../recipe/DeleteModal.css";
 
 export default function PostList() {
   const navigate = useNavigate();
 
-  const [posts, setPosts] = useState([
-    { number: 1, id: "john123", postcontent: "동해바다가 보고싶어서 펜션을 빌렸어요. 바베큐...", date: "2025-05-01" },
-    { number: 2, id: "emma_cook", postcontent: "가족 여행을 다녀왔는데 정말 힐링이었어요!", date: "2025-05-03" },
-    { number: 3, id: "david456", postcontent: "서울 야경을 보러 남산타워 다녀왔습니다.", date: "2025-05-04" },
-    { number: 4, id: "cookmaster01", postcontent: "강릉 커피거리 카페투어! 추천해요.", date: "2025-05-05" },
-    { number: 5, id: "foodie_lee", postcontent: "주말에 캠핑 다녀왔어요~ 날씨도 좋고 음식도 맛있고!", date: "2025-05-06" },
-    { number: 6, id: "chef_kim", postcontent: "여수 밤바다 감성 제대로 느끼고 왔어요.", date: "2025-05-07" },
-    { number: 7, id: "recipequeen", postcontent: "인천 차이나타운 먹방 투어 추천!", date: "2025-05-08" },
-    { number: 8, id: "kitchenhero", postcontent: "벚꽃 시즌에 진해 다녀왔어요~ 사진 대박!", date: "2025-05-09" },
-    { number: 9, id: "chef_sun", postcontent: "설악산 등산으로 체력 단련했습니다!", date: "2025-05-10" },
-    { number: 10, id: "ricegod", postcontent: "속초 대게찜 먹고 왔어요. 완전 강추!", date: "2025-05-11" },
-    { number: 11, id: "cooknara", postcontent: "제주도 우도 투어는 언제나 옳아요.", date: "2025-05-12" },
-    { number: 12, id: "kimfood", postcontent: "남해 다랭이 마을, 조용한 힐링 장소였어요.", date: "2025-05-13" }
-  ]);
-
+  const [posts, setPosts] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,23 +17,42 @@ export default function PostList() {
   const [selectedPost, setSelectedPost] = useState(null);
   const [deleteReason, setDeleteReason] = useState("");
 
-  const indexOfLast = currentPage * postsPerPage;
-  const indexOfFirst = indexOfLast - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirst, indexOfLast);
-  const totalPages = Math.ceil(posts.length / postsPerPage);
+  useEffect(() => {
+    fetchPosts(currentPage - 1);
+  }, [currentPage]);
+
+  const fetchPosts = async (page) => {
+    try {
+      const response = await api.get("/admin/boards", {
+        params: {
+          page,
+          size: postsPerPage,
+          sortBy: "createdAt",
+        },
+      });
+      setPosts(
+        response.data.content.map((post, index) => ({
+          ...post,
+          number: page * postsPerPage + index + 1,
+        }))
+      );
+    } catch (err) {
+      console.error("게시글 불러오기 실패", err);
+    }
+  };
 
   const toggleSelectAll = () => {
     if (selectAll) {
       setCheckedItems([]);
     } else {
-      setCheckedItems(posts.map((p) => p.number));
+      setCheckedItems(posts.map((p) => p.id));
     }
     setSelectAll(!selectAll);
   };
 
-  const toggleItem = (number) => {
+  const toggleItem = (id) => {
     setCheckedItems((prev) =>
-      prev.includes(number) ? prev.filter((n) => n !== number) : [...prev, number]
+      prev.includes(id) ? prev.filter((n) => n !== id) : [...prev, id]
     );
   };
 
@@ -59,15 +67,20 @@ export default function PostList() {
     setModalOpen(false);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
+    const adminUsername = localStorage.getItem("adminUsername") || "admin";
     if (selectedPost) {
-      setPosts((prev) => prev.filter((p) => p.number !== selectedPost.number).map((p, i) => ({ ...p, number: i + 1 })));
-      setCheckedItems((prev) => prev.filter((id) => id !== selectedPost.number));
-    } else {
-      if (checkedItems.length > 5 && !window.confirm("정말 선택한 게시물들을 삭제하시겠습니까?")) return;
-      setPosts((prev) => prev.filter((p) => !checkedItems.includes(p.number)).map((p, i) => ({ ...p, number: i + 1 })));
-      setCheckedItems([]);
-      setSelectAll(false);
+      try {
+        await api.delete(`/admin/boards/${selectedPost.id}`, {
+          data: {
+            adminUsername,
+            reason: deleteReason,
+          },
+        });
+        fetchPosts(currentPage - 1);
+      } catch (err) {
+        console.error("삭제 실패", err);
+      }
     }
     closeModal();
   };
@@ -77,6 +90,8 @@ export default function PostList() {
     setCheckedItems([]);
   };
 
+  const totalPages = Math.ceil(posts.length / postsPerPage);
+
   return (
     <div className="post-list-container">
       <div className="white-box">
@@ -85,7 +100,12 @@ export default function PostList() {
 
         <div className="top-bar">
           <div className="checkbox-wrapper">
-            <input type="checkbox" checked={selectAll} onChange={toggleSelectAll} className="check" />
+            <input
+              type="checkbox"
+              checked={selectAll}
+              onChange={toggleSelectAll}
+              className="check"
+            />
             <label>전체</label>
           </div>
 
@@ -97,7 +117,9 @@ export default function PostList() {
           </div>
 
           <div className="delete-button-wrapper">
-            <button className="top-delete-button" onClick={() => openModal(null)}>삭제</button>
+            <button className="top-delete-button" onClick={() => openModal(null)}>
+              삭제
+            </button>
           </div>
         </div>
 
@@ -113,25 +135,31 @@ export default function PostList() {
             </tr>
           </thead>
           <tbody>
-            {currentPosts.map((post) => (
-              <tr key={post.number}>
+            {posts.map((post) => (
+              <tr key={post.id}>
                 <td>
                   <input
                     type="checkbox"
                     className="check"
-                    checked={checkedItems.includes(post.number)}
-                    onChange={() => toggleItem(post.number)}
+                    checked={checkedItems.includes(post.id)}
+                    onChange={() => toggleItem(post.id)}
                   />
                 </td>
                 <td>{post.number}</td>
-                <td>{post.id}</td>
-                <td>{post.postcontent}</td>
-                <td>{post.date}</td>
+                <td>{post.writer}</td>
+                <td>{post.content}</td>
+                <td>{post.createdAt.slice(0, 10)}</td>
                 <td className="buttons">
-                  <button className="delete" onClick={() => openModal(post)}>삭제</button>
-                  <button className="detailSee" onClick={() => navigate(`/posts/${post.number}`)}>
+                  <button className="delete" onClick={() => openModal(post)}>
+                    삭제
+                  </button>
+                  <button
+                    className="detailSee"
+                    onClick={() => navigate(`/comments/${post.id}/board`)}
+                  >
                     상세보기
                   </button>
+
                 </td>
               </tr>
             ))}
@@ -163,8 +191,12 @@ export default function PostList() {
               value={deleteReason}
               onChange={(e) => setDeleteReason(e.target.value)}
             />
-            <button className="modal-button" onClick={handleConfirmDelete}>확인</button>
-            <button className="modal-button cancel" onClick={closeModal}>취소</button>
+            <button className="modal-button" onClick={handleConfirmDelete}>
+              확인
+            </button>
+            <button className="modal-button cancel" onClick={closeModal}>
+              취소
+            </button>
           </div>
         </div>
       )}

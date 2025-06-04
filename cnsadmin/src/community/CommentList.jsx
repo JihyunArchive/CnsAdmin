@@ -1,25 +1,14 @@
-import React, { useState } from "react";
+// src/pages/CommentList.jsx
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../api/axiosInstance";
 import "./CommentList.css";
+import "../recipe/DeleteModal.css";
 
 export default function CommentList() {
   const navigate = useNavigate();
 
-  const [comments, setComments] = useState([
-    { number: 1, id: "john123", postContent: "동해바다가 보고싶어서 펜션을 빌렸어요. 바베큐...", commentContent: "어머!! 바다사진 너무..." },
-  { number: 2, id: "emma_cook", postContent: "가족 여행을 다녀왔는데 정말 힐링이었어요!", commentContent: "가족끼리 여행 부럽네요!" },
-  { number: 3, id: "david456", postContent: "서울 야경을 보러 남산타워 다녀왔습니다.", commentContent: "야경 사진 공유해줘요!" },
-  { number: 4, id: "cookmaster01", postContent: "강릉 커피거리 카페투어! 추천해요.", commentContent: "저도 커피 좋아하는데~ 가봐야겠어요!" },
-  { number: 5, id: "foodie_lee", postContent: "제주도 흑돼지 먹고 왔어요. 인생고기!", commentContent: "군침 도네요ㅠㅠ" },
-  { number: 6, id: "skylover", postContent: "비행기 타고 부산 야경 보러 갔어요.", commentContent: "로망이네요 ✈️" },
-  { number: 7, id: "travel_maniac", postContent: "여수 밤바다 들으면서 걷기 너무 좋았어요.", commentContent: "노래 제목이랑 딱이네요!" },
-  { number: 8, id: "mountain_hiker", postContent: "설악산 등산! 정상 뷰가 미쳤어요.", commentContent: "진짜 힐링이죠 등산은~" },
-  { number: 9, id: "citysnapper", postContent: "홍대 거리 사진 찍으러 나갔다가 소품샵 탐방!", commentContent: "홍대는 진짜 볼게 많아요 ㅎㅎ" },
-  { number: 10, id: "healing_trip", postContent: "온천여행 다녀왔어요. 피로가 싹 풀리네요.", commentContent: "온천 최고에요~ 몸 녹고 좋죠!" },
-  { number: 11, id: "island_seeker", postContent: "울릉도 다녀왔는데 생각보다 교통이 불편했어요.", commentContent: "헉 그래도 경치는 좋았죠?" },
-  { number: 12, id: "photo_jenny", postContent: "봄꽃 촬영하러 진해 갔다왔어요. 벚꽃 만개!", commentContent: "진해 벚꽃은 진리죠 🌸" }
-  ]);
-
+  const [comments, setComments] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,24 +16,46 @@ export default function CommentList() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedComment, setSelectedComment] = useState(null);
   const [deleteReason, setDeleteReason] = useState("");
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [totalPages, setTotalPages] = useState(1);
 
-  const indexOfLast = currentPage * commentsPerPage;
-  const indexOfFirst = indexOfLast - commentsPerPage;
-  const currentComments = comments.slice(indexOfFirst, indexOfLast);
-  const totalPages = Math.ceil(comments.length / commentsPerPage);
+  const fetchComments = async () => {
+    try {
+      const response = await api.get("/admin/comments", {
+        params: {
+          page: currentPage - 1,
+          size: commentsPerPage,
+        },
+      });
+      const data = response.data;
+      setComments(
+        data.content.map((comment, index) => ({
+          ...comment,
+          number: (currentPage - 1) * commentsPerPage + index + 1,
+        }))
+      );
+      setTotalPages(data.totalPages);
+    } catch (err) {
+      console.error("댓글 불러오기 실패", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchComments();
+  }, [currentPage]);
 
   const toggleSelectAll = () => {
     if (selectAll) {
       setCheckedItems([]);
     } else {
-      setCheckedItems(comments.map((p) => p.number));
+      setCheckedItems(comments.map((c) => c.commentId));
     }
     setSelectAll(!selectAll);
   };
 
-  const toggleItem = (number) => {
+  const toggleItem = (id) => {
     setCheckedItems((prev) =>
-      prev.includes(number) ? prev.filter((n) => n !== number) : [...prev, number]
+      prev.includes(id) ? prev.filter((n) => n !== id) : [...prev, id]
     );
   };
 
@@ -59,15 +70,25 @@ export default function CommentList() {
     setModalOpen(false);
   };
 
-  const handleConfirmDelete = () => {
-    if (selectedComment) {
-      setComments((prev) => prev.filter((p) => p.number !== selectedComment.number).map((p, i) => ({ ...p, number: i + 1 })));
-      setCheckedItems((prev) => prev.filter((id) => id !== selectedComment.number));
-    } else {
-      if (checkedItems.length > 5 && !window.confirm("정말 선택한 게시물들을 삭제하시겠습니까?")) return;
-      setComments((prev) => prev.filter((p) => !checkedItems.includes(p.number)).map((p, i) => ({ ...p, number: i + 1 })));
-      setCheckedItems([]);
-      setSelectAll(false);
+  const handleConfirmDelete = async () => {
+    const adminUsername = localStorage.getItem("adminUsername") || "admin";
+    try {
+      if (selectedComment) {
+        await api.delete(`/admin/comments/${selectedComment.commentId}`, {
+          data: { adminUsername, reason: deleteReason },
+        });
+      } else {
+        await Promise.all(
+          checkedItems.map((id) =>
+            api.delete(`/admin/comments/${id}`, {
+              data: { adminUsername, reason: deleteReason },
+            })
+          )
+        );
+      }
+      fetchComments();
+    } catch (err) {
+      console.error("삭제 실패", err);
     }
     closeModal();
   };
@@ -75,6 +96,28 @@ export default function CommentList() {
   const handlePageClick = (pageNumber) => {
     setCurrentPage(pageNumber);
     setCheckedItems([]);
+  };
+
+  const handleSearch = async () => {
+    try {
+      const response = await api.get("/admin/comments/search", {
+        params: {
+          keyword: searchKeyword,
+          page: 0,
+          size: commentsPerPage,
+        },
+      });
+      setCurrentPage(1);
+      setComments(
+        response.data.content.map((comment, index) => ({
+          ...comment,
+          number: index + 1,
+        }))
+      );
+      setTotalPages(response.data.totalPages);
+    } catch (err) {
+      console.error("검색 실패", err);
+    }
   };
 
   return (
@@ -91,8 +134,13 @@ export default function CommentList() {
 
           <div className="search-box-wrapper">
             <div className="search-box">
-              <input type="text" placeholder="댓글 검색" />
-              <span className="search-icon">🔍</span>
+              <input
+                type="text"
+                placeholder="댓글 검색"
+                value={searchKeyword}
+                onChange={(e) => setSearchKeyword(e.target.value)}
+              />
+              <span className="search-icon" onClick={handleSearch}>🔍</span>
             </div>
           </div>
 
@@ -113,23 +161,23 @@ export default function CommentList() {
             </tr>
           </thead>
           <tbody>
-            {currentComments.map((comment) => (
-              <tr key={comment.number}>
+            {comments.map((comment) => (
+              <tr key={comment.commentId}>
                 <td>
                   <input
                     type="checkbox"
                     className="check"
-                    checked={checkedItems.includes(comment.number)}
-                    onChange={() => toggleItem(comment.number)}
+                    checked={checkedItems.includes(comment.commentId)}
+                    onChange={() => toggleItem(comment.commentId)}
                   />
                 </td>
                 <td>{comment.number}</td>
-                <td>{comment.id}</td>
-                <td>{comment.postContent}</td>
-                <td>{comment.commentContent}</td>
+                <td>{comment.writer}</td>
+                <td>{comment.boardContent}</td>
+                <td>{comment.content}</td>
                 <td className="buttons">
                   <button className="delete" onClick={() => openModal(comment)}>삭제</button>
-                  <button className="detailSee" onClick={() => navigate(`/comments/${comment.number}`)}>
+                  <button className="detailSee" onClick={() => navigate(`/comments/${comment.commentId}/board`)}>
                     상세보기
                   </button>
                 </td>

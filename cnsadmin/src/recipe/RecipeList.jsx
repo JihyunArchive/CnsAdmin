@@ -1,54 +1,75 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../api/axiosInstance";
 import "./RecipeList.css";
 import "./DeleteModal.css";
 
 export default function RecipeList() {
   const navigate = useNavigate();
 
-  const [recipes, setRecipes] = useState([
-    { number: 1, id: "john123", title: "알배추전골 재료", content: "다진 돼지고기에 밑간 재료를...", date: "2025-05-01" },
-    { number: 2, id: "emma_cook", title: "된장찌개 끓이기", content: "된장과 멸치 육수를 준비해서...", date: "2025-05-01" },
-    { number: 3, id: "david456", title: "김치볶음밥 만들기", content: "김치와 밥, 햄을 준비해서...", date: "2025-05-03" },
-    { number: 4, id: "cookmaster01", title: "잡채밥 만들기", content: "잡채와 밥, 고추장을 준비해서...", date: "2025-05-05" },
-    { number: 5, id: "foodie_lee", title: "케찹밥 만들기", content: "케찹와 밥, 계란을 준비해서...", date: "2025-05-07" },
-    { number: 6, id: "chef_kim", title: "만두국 만들기", content: "먼저 재료는 만두와 육수를 준비합니다.", date: "2025-05-11" },
-    { number: 7, id: "recipequeen", title: "라면 만들기", content: "물과 라면 봉투를 준비해서...", date: "2025-05-11" },
-    { number: 8, id: "kitchenhero", title: "복숭아 아이스티 만들기", content: "뜨거운 물과 가루, 차가운 물을 준비해서...", date: "2025-05-11" },
-    { number: 9, id: "chef_sun", title: "계란말이 만들기", content: "계란을 풀고 간을 해서...", date: "2025-05-13" },
-    { number: 10, id: "ricegod", title: "밥짓기", content: "쌀을 씻고 물을 맞춰서...", date: "2025-05-15" },
-    { number: 11, id: "cooknara", title: "닭갈비 만들기", content: "닭고기와 양념장을 준비해서...", date: "2025-05-16" },
-    { number: 12, id: "kimfood", title: "떡볶이 만들기", content: "떡과 어묵, 고추장을 넣고...", date: "2025-05-17" }
-  ]);
-
+  const [recipes, setRecipes] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [deleteReason, setDeleteReason] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [searchKeyword, setSearchKeyword] = useState("");
+
   const recipesPerPage = 10;
 
-  const indexOfLastRecipe = currentPage * recipesPerPage;
-  const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
-  const totalPages = Math.ceil(recipes.length / recipesPerPage);
+  const fetchRecipes = async () => {
+    try {
+      const res = searchKeyword
+        ? await api.get("/admin/recipes/search", {
+            params: {
+              title: searchKeyword,
+              page: currentPage - 1,
+              size: recipesPerPage,
+            },
+          })
+        : await api.get("/admin/recipes", {
+            params: {
+              page: currentPage - 1,
+              size: recipesPerPage,
+            },
+          });
+
+      const content = res.data.content;
+      setRecipes(
+        content.map((r, idx) => ({
+          number: idx + 1 + (currentPage - 1) * recipesPerPage,
+          id: r.username,
+          title: r.title,
+          content: "",
+          date: r.createdAt.slice(0, 10),
+          recipeId: r.recipeId,
+        }))
+      );
+      setTotalPages(res.data.totalPages);
+    } catch (err) {
+      console.error("레시피 불러오기 실패", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchRecipes();
+  }, [currentPage, searchKeyword]);
 
   const toggleSelectAll = () => {
     if (selectAll) {
       setCheckedItems([]);
     } else {
-      setCheckedItems(recipes.map((r) => r.number));
+      setCheckedItems(recipes.map((r) => r.recipeId));
     }
     setSelectAll(!selectAll);
   };
 
-  const toggleItem = (number) => {
-    if (checkedItems.includes(number)) {
-      setCheckedItems(checkedItems.filter((n) => n !== number));
-    } else {
-      setCheckedItems([...checkedItems, number]);
-    }
+  const toggleItem = (id) => {
+    setCheckedItems((prev) =>
+      prev.includes(id) ? prev.filter((n) => n !== id) : [...prev, id]
+    );
   };
 
   const openModal = (recipe) => {
@@ -62,35 +83,33 @@ export default function RecipeList() {
     setModalOpen(false);
   };
 
-  const handleConfirmDelete = () => {
-  if (selectedRecipe) {
-    // 단일 삭제
-    setRecipes((prev) => {
-      const updated = prev.filter((r) => r.number !== selectedRecipe.number);
-      return updated.map((r, i) => ({ ...r, number: i + 1 }));
-    });
-    setCheckedItems((prev) => prev.filter((id) => id !== selectedRecipe.number));
-  } else {
-    // 복수 삭제 확인
-    if (checkedItems.length > 5) {
-      const confirmBulk = window.confirm("정말 선택한 레시피들을 삭제하시겠습니까?");
-      if (!confirmBulk) {
-        closeModal();
-        return;
-      }
+  const handleConfirmDelete = async () => {
+    if (!deleteReason) {
+      alert("삭제 사유를 입력해주세요.");
+      return;
     }
 
-    setRecipes((prev) => {
-      const updated = prev.filter((r) => !checkedItems.includes(r.number));
-      return updated.map((r, i) => ({ ...r, number: i + 1 }));
-    });
-    setCheckedItems([]);
-    setSelectAll(false);
-  }
+    try {
+      if (selectedRecipe) {
+        await api.delete(`/admin/recipes/${selectedRecipe.recipeId}`, {
+          data: { reason: deleteReason },
+        });
+      } else {
+        for (const id of checkedItems) {
+          await api.delete(`/admin/recipes/${id}`, {
+            data: { reason: deleteReason },
+          });
+        }
+      }
 
-  closeModal();
-};
-
+      setCheckedItems([]);
+      setSelectAll(false);
+      fetchRecipes();
+      closeModal();
+    } catch (err) {
+      console.error("삭제 실패", err);
+    }
+  };
 
   const handlePageClick = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -116,8 +135,16 @@ export default function RecipeList() {
 
           <div className="search-box-wrapper">
             <div className="search-box">
-              <input type="text" placeholder="레시피 검색" />
-              <span className="search-icon">🔍</span>
+              <input
+                type="text"
+                placeholder="레시피 검색"
+                value={searchKeyword}
+                onChange={(e) => setSearchKeyword(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") fetchRecipes();
+                }}
+              />
+              <span className="search-icon" onClick={fetchRecipes}>🔍</span>
             </div>
           </div>
 
@@ -152,15 +179,15 @@ export default function RecipeList() {
             </tr>
           </thead>
           <tbody>
-            {currentRecipes.map((recipe) => (
-              <tr key={recipe.number}>
+            {recipes.map((recipe) => (
+              <tr key={recipe.recipeId}>
                 <td>
                   <div className="checkbox-wrapper">
                     <input
                       type="checkbox"
                       className="check"
-                      checked={checkedItems.includes(recipe.number)}
-                      onChange={() => toggleItem(recipe.number)}
+                      checked={checkedItems.includes(recipe.recipeId)}
+                      onChange={() => toggleItem(recipe.recipeId)}
                     />
                   </div>
                 </td>
@@ -171,7 +198,12 @@ export default function RecipeList() {
                 <td>{recipe.date}</td>
                 <td className="buttons">
                   <button className="delete" onClick={() => openModal(recipe)}>삭제</button>
-                  <button className="detailSee" onClick={() => navigate(`/recipes/${recipe.number}`)}>상세보기</button>
+                  <button
+                    className="detailSee"
+                    onClick={() => navigate(`/recipes/${recipe.recipeId}`)}
+                  >
+                    상세보기
+                  </button>
                 </td>
               </tr>
             ))}
