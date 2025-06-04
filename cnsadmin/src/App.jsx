@@ -89,7 +89,7 @@ export default function App() {
               <Route path="recipes" element={<RecipeList />} />
               <Route path="deletes" element={<DeleteList />} />
               <Route path="recipes/:postId/reviews/:reviewId" element={<ReviewDetail />} />
-              <Route path="recipes/:postId" element={<RecipeDetail />} />
+              <Route path="recipes/:recipeId" element={<RecipeDetail />} />
               <Route path="rdeletes" element={<ReviewDeleteList />} />
               <Route path="trade/sales" element={<TradeSaleList />} />
               <Route path="trade/report" element={<TradeReportList />} />

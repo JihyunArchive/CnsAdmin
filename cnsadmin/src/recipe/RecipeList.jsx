@@ -204,6 +204,7 @@ export default function RecipeList() {
                   >
                     상세보기
                   </button>
+
                 </td>
               </tr>
             ))}

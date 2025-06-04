@@ -124,3 +124,22 @@
   color: white;
   background: #2aa52a;
 }
+
+.tab-header {
+  display: flex;
+  justify-content: flex-start;
+  margin: 20px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.tab-item {
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 19px;
+  border-bottom: 3px solid transparent;
+}
+
+.tab-item.active {
+  border-bottom: 3px solid black;
+}
+

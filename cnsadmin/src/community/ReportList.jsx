@@ -23,7 +23,7 @@ export default function ReportList() {
     const fetchReports = async () => {
       try {
         const url =
-          activeTab === "게시물" ? "/api/admin/reports/boards" : "/api/admin/reports/comments";
+          activeTab === "게시물" ? "/admin/reports/boards" : "/admin/reports/comments";
         const params = { page: currentPage - 1, size: reportsPerPage };
         const response = await api.get(url, { params });
         const data = response.data;
@@ -34,9 +34,7 @@ export default function ReportList() {
           date: item.createdAt?.slice(0, 10),
           reportId: item.reportId,
         }));
-        activeTab === "게시물"
-          ? setPostReports(mapped)
-          : setCommentReports(mapped);
+        activeTab === "게시물" ? setPostReports(mapped) : setCommentReports(mapped);
         setTotalPages(data.totalPages);
       } catch (err) {
         console.error("신고 목록 불러오기 실패:", err);
@@ -96,8 +94,8 @@ export default function ReportList() {
     try {
       const url =
         activeTab === "게시물"
-          ? "/api/admin/reports/boards/search"
-          : "/api/admin/reports/comments/search";
+          ? "/admin/reports/boards/search"
+          : "/admin/reports/comments/search";
       const response = await api.get(url, {
         params: {
           keyword: searchKeyword,
@@ -112,9 +110,7 @@ export default function ReportList() {
         date: item.createdAt.slice(0, 10),
         reportId: item.reportId,
       }));
-      activeTab === "게시물"
-        ? setPostReports(mapped)
-        : setCommentReports(mapped);
+      activeTab === "게시물" ? setPostReports(mapped) : setCommentReports(mapped);
       setCurrentPage(1);
     } catch (err) {
       console.error("검색 실패:", err);

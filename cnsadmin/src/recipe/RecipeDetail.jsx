@@ -8,7 +8,7 @@ export default function RecipeDetail() {
   const { recipeId } = useParams();
   const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState("판매");
+  const [activeTab, setActiveTab] = useState("재료");
   const [recipe, setRecipe] = useState({});
   const [steps, setSteps] = useState([]);
   const [ingredients, setIngredients] = useState([]);
@@ -45,7 +45,14 @@ export default function RecipeDetail() {
           seeNumber: data.viewCount + "회",
         });
 
-        setSteps(JSON.parse(data.cookingSteps || "[]"));
+        setSteps(
+        JSON.parse(data.cookingSteps || "[]").map((s, i) => ({
+          step: s.step ?? i + 1,
+          text: s.text ?? s.description ?? "",
+          image: s.image ?? "",
+        }))
+      );
+
 
         setIngredients(
           (data.ingredients || "")
@@ -150,14 +157,14 @@ export default function RecipeDetail() {
         <hr className="recipe-divider" />
 
         <div className="tab-wrapper">
-          <button className={`tab tab-left ${activeTab === "판매" ? "active" : ""}`} onClick={() => setActiveTab("판매")}>판매</button>
+          <button className={`tab tab-left ${activeTab === "재료" ? "active" : ""}`} onClick={() => setActiveTab("재료")}>재료</button>
           <button className={`tab tab-center ${activeTab === "조리순서" ? "active" : ""}`} onClick={() => setActiveTab("조리순서")}>조리순서</button>
           <button className={`tab tab-right ${activeTab === "리뷰" ? "active" : ""}`} onClick={() => setActiveTab("리뷰")}>리뷰</button>
         </div>
 
         <hr className="tab-divider" />
 
-        {(activeTab === "판매" || activeTab === "조리순서") && (
+        {(activeTab === "재료" || activeTab === "조리순서") && (
           <>
             <table className="detail-table">
               <tbody>
@@ -185,7 +192,7 @@ export default function RecipeDetail() {
               </tbody>
             </table>
 
-            {activeTab === "판매" && (
+            {activeTab === "재료" && (
               <>
                 <h3 className="section-title">재료</h3>
                 <table className="ingredient-table">
@@ -203,17 +210,27 @@ export default function RecipeDetail() {
 
             {activeTab === "조리순서" && (
               <div className="step-list">
-                {steps.map((step) => (
-                  <div className="step-row" key={step.step}>
-                    <div className="step-th">STEP {step.step}</div>
-                    <div className="step-td">
-                      {step.image && <img src={step.image} alt={`step${step.step}`} className="step-image" />}
+                {steps.map((step) => {
+                  const cleanedText = step.text.replace(/^STEP\s*\d+[:：]?\s*/i, "");
+                  return (
+                    <div className="step-row" key={step.step}>
+                      <div className="step-th">STEP {step.step}</div>
+                      <div className="step-td">
+                        {step.image && (
+                          <img
+                            src={step.image}
+                            alt={`step${step.step}`}
+                            className="step-image"
+                          />
+                        )}
+                      </div>
+                      <div className="step-td step-text">{cleanedText}</div>
                     </div>
-                    <div className="step-td step-text">{step.text}</div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
+
           </>
         )}
 
