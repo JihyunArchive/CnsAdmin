@@ -81,7 +81,7 @@ export default function App() {
               <Route path="users/:userId/history" element={<UserHistory />} />
               <Route path="posts" element={<PostList />} />
               <Route path="dposts" element={<DeletePostList />} />
-              <Route path="posts/:postId" element={<PostDetail />} />
+              <Route path="/comments/:commentId/board" element={<PostDetail />} />
               <Route path="dcomments" element={<DeleteCommentList />} />
               <Route path="comments" element={<CommentList />} />
               <Route path="reports" element={<ReportList />} />
