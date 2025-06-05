@@ -16,21 +16,36 @@ export default function RecipeStats() {
   const [selectedCategory, setSelectedCategory] = useState("전체");
   const [summaryStats, setSummaryStats] = useState({ total: 0, average: 0, max: 0, min: 0 });
 
-  const tabList = ["날짜별", "카테고리별", "찜별", "추천별", "공유별"];
-  const tabsWithDateFilter = ["날짜별", "찜별", "추천별", "공유별"];
-  const categoryList = ["전체", "한식", "중식", "양식", "일식", "채식", "간식", "안주", "밑반찬"];
+  const tabList = ["날짜별", "카테고리별", "찜별", "추천별"];
+  const tabsWithDateFilter = ["날짜별", "찜별", "추천별"];
 
-  // 한글 → 영문 enum 값 매핑
-  const categoryMap = {
-    한식: "koreaFood",
-    중식: "chineseFood",
-    양식: "westernFood",
-    일식: "japaneseFood",
-    채식: "vegetarianDiet",
-    간식: "snack",
-    안주: "alcoholSnack",
-    밑반찬: "sideDish",
+  const categoryEnumOrder = [
+    "koreaFood",
+    "westernFood",
+    "japaneseFood",
+    "chineseFood",
+    "vegetarianDiet",
+    "snack",
+    "alcoholSnack",
+    "sideDish",
+    "etc"
+  ];
+
+  const categoryLabelMap = {
+    koreaFood: "한식",
+    westernFood: "양식",
+    japaneseFood: "일식",
+    chineseFood: "중식",
+    vegetarianDiet: "채식",
+    snack: "간식",
+    alcoholSnack: "안주",
+    sideDish: "밑반찬",
+    etc: "기타",
   };
+
+  const categoryList = ["전체", ...Object.values(categoryLabelMap)];
+
+  const categoryMap = Object.fromEntries(Object.entries(categoryLabelMap).map(([eng, kor]) => [kor, eng]));
 
   const fetchStats = async () => {
     try {
@@ -39,43 +54,74 @@ export default function RecipeStats() {
 
       if (selectedTab === "찜별") endpoint += "/likes";
       else if (selectedTab === "추천별") endpoint += "/recommends";
-      else if (selectedTab === "공유별") endpoint += "/shares";
 
       if (tabsWithDateFilter.includes(selectedTab)) {
         if (dateFilterType === "기간" && startDate && endDate) {
           const diffDays = (endDate - startDate) / (1000 * 60 * 60 * 24);
-          const type = diffDays > 60 ? "MONTHLY" : "DAILY";
 
-          response = await api.get(endpoint, {
-            params: {
-              type,
-              start: startDate.toISOString().split("T")[0],
-              end: endDate.toISOString().split("T")[0],
-            },
-          });
-        } else if (dateFilterType === "연도") {
-          response = await api.get(endpoint, {
-            params: { type: "YEARLY", year },
-          });
+            if (diffDays > 60) {
+              response = await api.get(endpoint, {
+                params: {
+                  type: "MONTHLY",
+                  year: startDate.getFullYear(),
+                  month: startDate.getMonth() + 1, 
+                },
+              });
+            } else {
+            response = await api.get(endpoint, {
+              params: {
+                type: "DAILY",
+                start: startDate.toISOString().split("T")[0],
+                end: endDate.toISOString().split("T")[0],
+              },
+            });
+          }
+        }else if (dateFilterType === "연도") {
+          response = await api.get(endpoint, { params: { type: "YEARLY", year } });
         } else if (dateFilterType === "월") {
-          response = await api.get(endpoint, {
-            params: { type: "MONTHLY", year, month },
-          });
+          response = await api.get(endpoint, { params: { type: "MONTHLY", year, month } });
         }
       } else if (selectedTab === "카테고리별") {
-        const englishCategory = categoryMap[selectedCategory] || null;
-        const params = englishCategory ? { category: englishCategory } : {};
-        response = await api.get("/admin/stats/recipes/categories", { params });
-      }
+        if (selectedCategory === "전체") {
+          response = await api.get("/admin/stats/recipes/categories");
 
-      console.log("✅ 백엔드 응답 데이터:", response?.data);
+          const raw = response.data;
+          const countMap = Object.fromEntries(raw.map((item) => [item.label, item.count]));
+
+          const labels = categoryEnumOrder.map((eng) => categoryLabelMap[eng]);
+          const counts = categoryEnumOrder.map((eng) => countMap[eng] || 0);
+
+          setChartData({
+            labels,
+            datasets: [
+              {
+                label: "카테고리별 레시피 수",
+              data: counts,
+              borderColor: "#2aa52a",
+              backgroundColor: "rgba(42, 165, 42, 0.1)",
+              tension: 0.3,
+              pointBackgroundColor: "#2aa52a",
+              pointRadius: 5,
+              },
+            ],
+          });
+
+          setSummaryStats({
+            total: counts.reduce((a, b) => a + b, 0),
+            average: (counts.reduce((a, b) => a + b, 0) / counts.length).toFixed(2),
+            max: Math.max(...counts),
+            min: Math.min(...counts),
+          });
+
+          return; // 조기 리턴
+        } else {
+          const englishCategory = categoryMap[selectedCategory] || null;
+          const params = englishCategory ? { category: englishCategory } : {};
+          response = await api.get("/admin/stats/recipes/categories", { params });
+        }
+      }
 
       const rawData = response?.data;
-
-      if (typeof rawData !== "object") {
-        throw new Error("⚠️ JSON 형식이 아님 (HTML 페이지일 수 있음)");
-      }
-
       const data = Array.isArray(rawData) ? rawData : rawData.data;
       const summary = rawData.summary;
 
@@ -98,16 +144,14 @@ export default function RecipeStats() {
           ],
         });
 
-        if (summary) {
-          setSummaryStats(summary);
-        } else {
-          setSummaryStats({
+        setSummaryStats(
+          summary || {
             total: counts.reduce((a, b) => a + b, 0),
             average: counts.length > 0 ? (counts.reduce((a, b) => a + b, 0) / counts.length).toFixed(2) : 0,
             max: Math.max(...counts, 0),
             min: Math.min(...counts, 0),
-          });
-        }
+          }
+        );
       }
     } catch (err) {
       console.error("❌ 레시피 통계 조회 실패:", err);
@@ -158,9 +202,7 @@ export default function RecipeStats() {
             {dateFilterType === "연도" && (
               <select value={year} onChange={(e) => setYear(Number(e.target.value))}>
                 {[2025, 2024, 2023, 2022, 2021].map((y) => (
-                  <option key={y} value={y}>
-                    {y}년
-                  </option>
+                  <option key={y} value={y}>{y}년</option>
                 ))}
               </select>
             )}
@@ -169,21 +211,16 @@ export default function RecipeStats() {
               <>
                 <select value={year} onChange={(e) => setYear(Number(e.target.value))}>
                   {[2025, 2024, 2023, 2022, 2021].map((y) => (
-                    <option key={y} value={y}>
-                      {y}년
-                    </option>
+                    <option key={y} value={y}>{y}년</option>
                   ))}
                 </select>
                 <select value={month} onChange={(e) => setMonth(Number(e.target.value))}>
                   {[...Array(12)].map((_, i) => (
-                    <option key={i + 1} value={i + 1}>
-                      {i + 1}월
-                    </option>
+                    <option key={i + 1} value={i + 1}>{i + 1}월</option>
                   ))}
                 </select>
               </>
             )}
-
             <button onClick={fetchStats}>조회</button>
           </div>
         )}
@@ -192,9 +229,7 @@ export default function RecipeStats() {
           <div className="filter-box">
             <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
               {categoryList.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
+                <option key={category} value={category}>{category}</option>
               ))}
             </select>
             <button onClick={fetchStats}>조회</button>
@@ -214,8 +249,7 @@ export default function RecipeStats() {
         xAxisLabel={
           dateFilterType === "연도"
             ? "(연도)"
-            : dateFilterType === "월" ||
-              (startDate && endDate && (endDate - startDate) / (1000 * 60 * 60 * 24) > 60)
+            : dateFilterType === "월" || (startDate && endDate && (endDate - startDate) / (1000 * 60 * 60 * 24) > 60)
             ? "(월)"
             : "(일)"
         }
