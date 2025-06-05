@@ -20,6 +20,18 @@ export default function RecipeStats() {
   const tabsWithDateFilter = ["날짜별", "찜별", "추천별", "공유별"];
   const categoryList = ["전체", "한식", "중식", "양식", "일식", "채식", "간식", "안주", "밑반찬"];
 
+  // 한글 → 영문 enum 값 매핑
+  const categoryMap = {
+    한식: "koreaFood",
+    중식: "chineseFood",
+    양식: "westernFood",
+    일식: "japaneseFood",
+    채식: "vegetarianDiet",
+    간식: "snack",
+    안주: "alcoholSnack",
+    밑반찬: "sideDish",
+  };
+
   const fetchStats = async () => {
     try {
       let response;
@@ -51,7 +63,9 @@ export default function RecipeStats() {
           });
         }
       } else if (selectedTab === "카테고리별") {
-        response = await api.get("/admin/stats/recipes/categories");
+        const englishCategory = categoryMap[selectedCategory] || null;
+        const params = englishCategory ? { category: englishCategory } : {};
+        response = await api.get("/admin/stats/recipes/categories", { params });
       }
 
       console.log("✅ 백엔드 응답 데이터:", response?.data);
