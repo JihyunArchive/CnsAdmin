@@ -1,3 +1,4 @@
+// src/pages/RecipeDetail.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/axiosInstance";
@@ -46,13 +47,12 @@ export default function RecipeDetail() {
         });
 
         setSteps(
-        JSON.parse(data.cookingSteps || "[]").map((s, i) => ({
-          step: s.step ?? i + 1,
-          text: s.text ?? s.description ?? "",
-          image: s.image ?? "",
-        }))
-      );
-
+          JSON.parse(data.cookingSteps || "[]").map((s, i) => ({
+            step: s.step ?? i + 1,
+            text: s.text ?? s.description ?? "",
+            image: s.image ?? "",
+          }))
+        );
 
         setIngredients(
           (data.ingredients || "")
@@ -66,6 +66,7 @@ export default function RecipeDetail() {
         setReviews(
           data.reviews?.map((r, idx) => ({
             number: idx + 1,
+            reviewId: r.reviewId,
             userId: r.userId,
             title: r.title,
             content: r.content,
@@ -118,31 +119,52 @@ export default function RecipeDetail() {
     setModalOpen(false);
   };
 
-  const handleConfirmDelete = () => {
-    if (selectedReview) {
-      setReviews((prev) => {
-        const updated = prev.filter((r) => r.number !== selectedReview.number);
-        return updated.map((r, i) => ({ ...r, number: i + 1 }));
-      });
-      setCheckedItems((prev) => prev.filter((id) => id !== selectedReview.number));
-    } else {
-      if (checkedItems.length > 5) {
-        const confirmBulk = window.confirm("정말 선택한 레시피들을 삭제하시겠습니까?");
-        if (!confirmBulk) {
-          closeModal();
-          return;
-        }
-      }
-
-      setReviews((prev) => {
-        const updated = prev.filter((r) => !checkedItems.includes(r.number));
-        return updated.map((r, i) => ({ ...r, number: i + 1 }));
-      });
-      setCheckedItems([]);
-      setSelectAll(false);
+  const handleConfirmDelete = async () => {
+    if (!deleteReason.trim()) {
+      alert("삭제 사유를 입력해주세요.");
+      return;
     }
 
-    closeModal();
+    try {
+      const token = localStorage.getItem("token");
+
+      if (selectedReview) {
+        await api.delete(`/admin/recipes/reviews/${selectedReview.reviewId}`, {
+          params: { reason: deleteReason },
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } else {
+        await Promise.all(
+          reviews
+            .filter((r) => checkedItems.includes(r.number))
+            .map((r) =>
+              api.delete(`/admin/recipes/reviews/${r.reviewId}`, {
+                params: { reason: deleteReason },
+                headers: { Authorization: `Bearer ${token}` },
+              })
+            )
+        );
+      }
+
+      alert("삭제가 완료되었습니다.");
+      const res = await api.get(`/admin/recipes/${recipeId}`);
+      setReviews(
+        res.data.reviews?.map((r, idx) => ({
+          number: idx + 1,
+          reviewId: r.reviewId,
+          userId: r.userId,
+          title: r.title,
+          content: r.content,
+          date: r.createdAt?.split("T")[0],
+        })) || []
+      );
+      setCheckedItems([]);
+      setSelectAll(false);
+      closeModal();
+    } catch (err) {
+      console.error("리뷰 삭제 실패", err);
+      alert("삭제 중 오류가 발생했습니다.");
+    }
   };
 
   const handlePageClick = (pageNumber) => {
@@ -211,17 +233,13 @@ export default function RecipeDetail() {
             {activeTab === "조리순서" && (
               <div className="step-list">
                 {steps.map((step) => {
-                  const cleanedText = step.text.replace(/^STEP\s*\d+[:：]?\s*/i, "");
+                  const cleanedText = step.text.replace(/^STEP\s*\d+[:：]?/i, "");
                   return (
                     <div className="step-row" key={step.step}>
                       <div className="step-th">STEP {step.step}</div>
                       <div className="step-td">
                         {step.image && (
-                          <img
-                            src={step.image}
-                            alt={`step${step.step}`}
-                            className="step-image"
-                          />
+                          <img src={step.image} alt={`step${step.step}`} className="step-image" />
                         )}
                       </div>
                       <div className="step-td step-text">{cleanedText}</div>
@@ -230,7 +248,6 @@ export default function RecipeDetail() {
                 })}
               </div>
             )}
-
           </>
         )}
 
