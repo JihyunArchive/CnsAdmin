@@ -17,7 +17,7 @@ export default function Layout({ setIsLoggedIn }) {
       <div className="navbar">
         <div className="logo">
           <Link to="/" className="logo">
-            <img src="/assets/logo.png" alt="logo" className="logo-img" />
+            <img src="/logo_cns.svg" alt="logo" className="logo-img" />
             <span>쿡앤쉐어</span>
           </Link>
         </div>
@@ -46,7 +46,7 @@ export default function Layout({ setIsLoggedIn }) {
               <Link to="/comments">댓글</Link>  
               <Link to="/dcomments">댓글 삭제 리스트</Link>  
               <Link to="/reports">신고내역</Link>  
-              <Link to="/dreports">댓글 신고내역역 리스트</Link>  
+              <Link to="/dreports">댓글 신고내역 리스트</Link>  
             </div>
           </div>
           <div className="nav-item">
