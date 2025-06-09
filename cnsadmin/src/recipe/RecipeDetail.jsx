@@ -81,12 +81,12 @@ export default function RecipeDetail() {
     fetchData();
   }, [recipeId]);
 
-  const filteredReviews = reviews.filter(
-    (r) =>
-      r.title.includes(searchKeyword) ||
-      r.content.includes(searchKeyword) ||
-      r.userId.includes(searchKeyword)
+  const filteredReviews = reviews.filter((r) =>
+      (r.title ?? '').includes(searchKeyword) ||
+      (r.content ?? '').includes(searchKeyword) ||
+      (r.userId ?? '').includes(searchKeyword)
   );
+
 
   const indexOfLastReview = currentPage * reviewsPerPage;
   const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
