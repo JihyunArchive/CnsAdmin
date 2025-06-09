@@ -41,52 +41,54 @@ export default function UserHistory() {
 
   return (
     <div className="user-history-container">
-      <h2>거래 내역</h2>
+      <div className="white-box">
+        <h2>거래 내역</h2>
 
-      <div className="history-tab">
-        <button className={tab === "sell" ? "active" : ""} onClick={() => setTab("sell")}>판매</button>
-        <button className={tab === "buy" ? "active" : ""} onClick={() => setTab("buy")}>구매</button>
-      </div>
+        <div className="history-tab">
+          <button className={tab === "sell" ? "active" : ""} onClick={() => setTab("sell")}>판매</button>
+          <button className={tab === "buy" ? "active" : ""} onClick={() => setTab("buy")}>구매</button>
+        </div>
 
-      <table className="history-table">
-        <thead>
-          <tr>
-            <th>번호</th>
-            <th>제목</th>
-            <th>게시 날짜</th>
-            <th>거래 상태</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentList.map((item, index) => (
-            <tr key={index}>
-              <td>{item.tradePostId}</td>
-              <td>{item.title}</td>
-              <td>{item.createdAt?.substring(0, 10)}</td>
-              <td>{item.status === 0 ? "거래중" : "거래완료"}</td>
-              <td>
-                <button
-                  className="view-button"
-                  onClick={() =>
-                    tab === "sell"
-                      ? navigate(`/admin/user-history/sale/${item.tradePostId}`)
-                      : navigate(`/admin/user-history/purchase/${item.tradePostId}`)
-                  }
-                >
-                  보기
-                </button>
-              </td>
+        <table className="history-table">
+          <thead>
+            <tr>
+              <th>번호</th>
+              <th>제목</th>
+              <th>게시 날짜</th>
+              <th>거래 상태</th>
+              <th></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {currentList.map((item, index) => (
+              <tr key={index}>
+                <td>{item.tradePostId}</td>
+                <td>{item.title}</td>
+                <td>{item.createdAt?.substring(0, 10)}</td>
+                <td>{item.status === 0 ? "거래중" : "거래완료"}</td>
+                <td>
+                  <button
+                    className="view-button"
+                    onClick={() =>
+                      tab === "sell"
+                        ? navigate(`/admin/user-history/sale/${item.tradePostId}`)
+                        : navigate(`/admin/user-history/purchase/${item.tradePostId}`)
+                    }
+                  >
+                    보기
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-      <div className="pagination">
-        <span>{"<"}</span>
-        <span className="active">1</span>
-        <span>1</span>
-        <span>{">"}</span>
+        <div className="pagination">
+          <span>{"<"}</span>
+          <span className="active">1</span>
+          <span>1</span>
+          <span>{">"}</span>
+        </div>
       </div>
     </div>
   );

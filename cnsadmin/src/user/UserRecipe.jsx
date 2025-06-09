@@ -47,56 +47,58 @@ export default function UserRecipe() {
 
   return (
     <div className="user-recipe-container">
-      <h2>등록한 레시피</h2>
+      <div className="white-box">
+        <h2>등록한 레시피</h2>
 
-      <div className="recipe-top-bar">
-        <input
-          type="text"
-          placeholder="레시피 검색"
-          value={searchKeyword}
-          onChange={(e) => setSearchKeyword(e.target.value)}
-        />
-        <button className="search-button" onClick={handleSearch}>🔍</button>
-      </div>
+        <div className="recipe-top-bar">
+          <input
+            type="text"
+            placeholder="레시피 검색"
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+          />
+          <button className="search-button" onClick={handleSearch}>🔍</button>
+        </div>
 
-      <table className="recipe-table">
-        <thead>
-          <tr>
-            <th>번호</th>
-            <th>아이디</th>
-            <th>제목</th>
-            <th>게시 날짜</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {recipes.map((recipe, index) => (
-            <tr key={`${recipe.id}-${index}`}>
-              <td>{index + 1}</td>
-              <td>{recipe.username}</td>
-              <td>{recipe.title}</td>
-              <td>{recipe.date}</td>
-              <td className="buttons">
-                <button
-                  className="view-button"
-                  onClick={() => navigate(`/admin/recipes/${recipe.id}`)}
-                >
-                  보기
-                </button>
-              </td>
+        <table className="recipe-table">
+          <thead>
+            <tr>
+              <th>번호</th>
+              <th>아이디</th>
+              <th>제목</th>
+              <th>게시 날짜</th>
+              <th></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {recipes.map((recipe, index) => (
+              <tr key={`${recipe.id}-${index}`}>
+                <td>{index + 1}</td>
+                <td>{recipe.username}</td>
+                <td>{recipe.title}</td>
+                <td>{recipe.date}</td>
+                <td className="buttons">
+                  <button
+                    className="view-button"
+                    onClick={() => navigate(`/admin/recipes/${recipe.id}`)}
+                  >
+                    보기
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-      <div className="pagination">
-        <span>{"<"}</span>
-        {[...Array(1)].map((_, i) => (
-          <span key={`page-${i}`} className={i === 0 ? "active" : ""}>
-            {i + 1}
-          </span>
-        ))}
-        <span>{">"}</span>
+        <div className="pagination">
+          <span>{"<"}</span>
+          {[...Array(1)].map((_, i) => (
+            <span key={`page-${i}`} className={i === 0 ? "active" : ""}>
+              {i + 1}
+            </span>
+          ))}
+          <span>{">"}</span>
+        </div>
       </div>
     </div>
   );

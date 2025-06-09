@@ -97,106 +97,108 @@ export default function UserList() {
 
   return (
     <div className="user-list-container">
-      <h2>회원 리스트</h2>
-
-      <div className="top-bar">
-        <label>
-          <input
-            type="checkbox"
-            onChange={handleCheckAll}
-            checked={checkedItems.length === users.length && users.length > 0}
-          />{" "}
-          전체
-        </label>
-        <div className="search-box">
-          <input
-            type="text"
-            placeholder="회원 검색"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") fetchUsers();
-            }}
-          />
-          <span className="search-icon" onClick={fetchUsers}>
-            🔍
-          </span>
-        </div>
-        <div className="action-buttons">
-          <button className="block" onClick={handleBlockClick}>
-            차단
-          </button>
-        </div>
-      </div>
-
-      <table className="user-table">
-        <thead>
-          <tr>
-            <th>
-              <input
-                type="checkbox"
-                onChange={handleCheckAll}
-                checked={checkedItems.length === users.length && users.length > 0}
-              />
-            </th>
-            <th>번호</th>
-            <th>이름</th>
-            <th>아이디</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>
-                <input
-                  type="checkbox"
-                  checked={checkedItems.includes(user.id)}
-                  onChange={() => handleCheck(user.id)}
-                />
-              </td>
-              <td>{user.number}</td>
-              <td>{user.name}</td>
-              <td>{user.username}</td>
-              <td className="buttons">
-                <button
-                  className="block"
-                  onClick={() => navigate(`/users/${user.id}`)}
-                >
-                  상세보기
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <div className="pagination">
-        <span>{"<"}</span>
-        <span className="active">1</span>
-        <span>{">"}</span>
-      </div>
-
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-box">
-            <p>회원을 차단하시는 이유가 어떻게 되나요?</p>
-            <textarea
-              value={blockReason}
-              onChange={(e) => setBlockReason(e.target.value)}
-              placeholder="예: 욕설이 너무 심함"
+      <div className="white-box">
+        <h2>회원 리스트</h2>
+        <hr className="user-divider" />
+        <div className="top-bar">
+          <label>
+            <input
+              type="checkbox"
+              onChange={handleCheckAll}
+              checked={checkedItems.length === users.length && users.length > 0}
+            />{" "}
+            전체
+          </label>
+          <div className="search-box">
+            <input
+              type="text"
+              placeholder="회원 검색"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") fetchUsers();
+              }}
             />
-            <div className="modal-buttons">
-              <button className="confirm" onClick={handleConfirm}>
-                확인
-              </button>
-              <button className="cancel" onClick={handleCancel}>
-                취소
-              </button>
-            </div>
+            <span className="search-icon" onClick={fetchUsers}>
+              🔍
+            </span>
+          </div>
+          <div className="action-buttons">
+            <button className="block" onClick={handleBlockClick}>
+              차단
+            </button>
           </div>
         </div>
-      )}
+
+        <table className="user-table">
+          <thead>
+            <tr>
+              <th>
+                <input
+                  type="checkbox"
+                  onChange={handleCheckAll}
+                  checked={checkedItems.length === users.length && users.length > 0}
+                />
+              </th>
+              <th>번호</th>
+              <th>이름</th>
+              <th>아이디</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>
+                  <input
+                    type="checkbox"
+                    checked={checkedItems.includes(user.id)}
+                    onChange={() => handleCheck(user.id)}
+                  />
+                </td>
+                <td>{user.number}</td>
+                <td>{user.name}</td>
+                <td>{user.username}</td>
+                <td className="buttons">
+                  <button
+                    className="block"
+                    onClick={() => navigate(`/users/${user.id}`)}
+                  >
+                    상세보기
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div className="pagination">
+          <span>{"<"}</span>
+          <span className="active">1</span>
+          <span>{">"}</span>
+        </div>
+
+        {showModal && (
+          <div className="modal-overlay">
+            <div className="modal-box">
+              <p>회원을 차단하시는 이유가 어떻게 되나요?</p>
+              <textarea
+                value={blockReason}
+                onChange={(e) => setBlockReason(e.target.value)}
+                placeholder="예: 욕설이 너무 심함"
+              />
+              <div className="modal-buttons">
+                <button className="confirm" onClick={handleConfirm}>
+                  확인
+                </button>
+                <button className="cancel" onClick={handleCancel}>
+                  취소
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

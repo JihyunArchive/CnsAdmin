@@ -96,10 +96,10 @@ input[type="checkbox"].check {
 
 .delete-table th,
 .delete-table td {
-  padding: 30px;
+  padding: 20px;
   text-align: center;
   border-bottom: 1px solid #eee;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .buttons button {

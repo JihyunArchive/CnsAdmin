@@ -9,29 +9,34 @@
 .user-history-container h2 {
   margin-bottom: 20px;
   font-size: 20px;
+  margin-left: 20px;
 }
 
 .history-tab {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
-  gap: 30px;
+  gap: 60px;
+  margin: 30px 0 20px 0;
 }
+
 
 .history-tab button {
   background: none;
   border: none;
+  padding: 12px 0;
+  width: 120px;            
   font-size: 16px;
-  font-weight: bold;
-  padding: 10px 20px;
-  color: #888;
-  border-bottom: 2px solid transparent;
   cursor: pointer;
+  text-align: center;
+  border-bottom: 3px solid transparent;
+  font-weight: bold;
+  color: #555;
+  transition: all 0.2s ease;
 }
 
 .history-tab button.active {
-  color: black;
-  border-bottom: 2px solid black;
+  border-bottom: 3px solid #2aa52a;
+  color: #2aa52a;
 }
 
 .history-table {
@@ -39,16 +44,23 @@
   border-collapse: collapse;
   background-color: white;
   margin-top: 10px;
+  margin-bottom: 70px;
+}
+
+.history-table thead tr  {
+  background-color: #f3f5f7;
+}
+
+.history-table thead th {
+  color: #757575;
 }
 
 .history-table th,
 .history-table td {
-  padding: 12px;
+  padding: 20px;
   text-align: center;
   border-bottom: 1px solid #eee;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 15px;
 }
 
 .pagination {

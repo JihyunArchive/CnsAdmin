@@ -107,103 +107,107 @@ export default function TradeReportList() {
 
   return (
     <div className="trade-post-list-container">
-      <div className="header-row">
-        <h2>신고내역 리스트</h2>
-      </div>
-
-      <div className="top-bar">
-        <label>
-          <input
-            type="checkbox"
-            onChange={handleSelectAll}
-            checked={isAllSelected}
-          /> 전체
-        </label>
-        <div className="search-box">
-          <input
-            type="text"
-            placeholder="동네 주방 검색"
-            value={searchKeyword}
-            onChange={handleSearchChange}
-          />
-          <span className="search-icon">🔍</span>
+      <div className="white-box"> 
+        <div className="header-row">
+          <h2>신고내역 리스트</h2>
         </div>
-        <div className="action-buttons">
-          <button className="delete" onClick={handleDelete}>삭제</button>
-          <button className="block" onClick={handleBlockClick}>차단</button>
-        </div>
-      </div>
 
-      <table className="trade-table">
-        <thead>
-          <tr>
-            <th></th>
-            <th>번호</th>
-            <th>아이디</th>
-            <th>제목</th>
-            <th>사유</th>
-            <th>신고 날짜</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentReports.map((r) => (
-            <tr key={r.tradePostId}>
-              <td>
-                <input
-                  type="checkbox"
-                  checked={selectedIds.includes(r.tradePostId)}
-                  onChange={() => handleCheckboxChange(r.tradePostId)}
-                />
-              </td>
-              <td>{r.tradePostId}</td>
-              <td>{r.username}</td>
-              <td>{r.title}</td>
-              <td>{r.reason}</td>
-              <td>{r.date}</td>
-              <td className="buttons">
-                <button
-                  className="detail"
-                  onClick={() => navigate(`/trade/${r.tradePostId}`)}
-                >
-                  상세보기
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        <hr className="trade-divider" />
 
-      <div className="pagination">
-        <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>{"<"}</button>
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i + 1}
-            className={currentPage === i + 1 ? "active" : ""}
-            onClick={() => handlePageChange(i + 1)}
-          >
-            {i + 1}
-          </button>
-        ))}
-        <button disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)}>{">"}</button>
-      </div>
-
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-box">
-            <p>차단 사유를 입력해주세요.</p>
-            <textarea
-              value={blockReason}
-              onChange={(e) => setBlockReason(e.target.value)}
-              placeholder="예: 반복적으로 욕설을 사용함"
+        <div className="top-bar">
+          <label>
+            <input
+              type="checkbox"
+              onChange={handleSelectAll}
+              checked={isAllSelected}
+            /> 전체
+          </label>
+          <div className="search-box">
+            <input
+              type="text"
+              placeholder="동네 주방 검색"
+              value={searchKeyword}
+              onChange={handleSearchChange}
             />
-            <div className="modal-buttons">
-              <button className="confirm" onClick={handleConfirm}>확인</button>
-              <button className="cancel" onClick={handleCancel}>취소</button>
-            </div>
+            <span className="search-icon">🔍</span>
+          </div>
+          <div className="action-buttons">
+            <button className="delete" onClick={handleDelete}>삭제</button>
+            <button className="block" onClick={handleBlockClick}>차단</button>
           </div>
         </div>
-      )}
+
+        <table className="trade-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>번호</th>
+              <th>아이디</th>
+              <th>제목</th>
+              <th>사유</th>
+              <th>신고 날짜</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentReports.map((r) => (
+              <tr key={r.tradePostId}>
+                <td>
+                  <input
+                    type="checkbox"
+                    checked={selectedIds.includes(r.tradePostId)}
+                    onChange={() => handleCheckboxChange(r.tradePostId)}
+                  />
+                </td>
+                <td>{r.tradePostId}</td>
+                <td>{r.username}</td>
+                <td>{r.title}</td>
+                <td>{r.reason}</td>
+                <td>{r.date}</td>
+                <td className="buttons">
+                  <button
+                    className="detail"
+                    onClick={() => navigate(`/trade/${r.tradePostId}`)}
+                  >
+                    상세보기
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div className="pagination">
+          <button disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>{"<"}</button>
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i + 1}
+              className={currentPage === i + 1 ? "active" : ""}
+              onClick={() => handlePageChange(i + 1)}
+            >
+              {i + 1}
+            </button>
+          ))}
+          <button disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)}>{">"}</button>
+        </div>
+
+        {showModal && (
+          <div className="modal-overlay">
+            <div className="modal-box">
+              <p>차단 사유를 입력해주세요.</p>
+              <textarea
+                value={blockReason}
+                onChange={(e) => setBlockReason(e.target.value)}
+                placeholder="예: 반복적으로 욕설을 사용함"
+              />
+              <div className="modal-buttons">
+                <button className="confirm" onClick={handleConfirm}>확인</button>
+                <button className="cancel" onClick={handleCancel}>취소</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

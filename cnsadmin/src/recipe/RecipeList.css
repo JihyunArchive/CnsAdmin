@@ -87,13 +87,18 @@ input[type="checkbox"].check {
 }
 
 .top-delete-button {
-  padding: 8px 14px;
-  background-color: #2aa52a;
-  color: white;
-  border: none;
-  border-radius: 6px;
+  padding: 6px 10px;
   font-size: 14px;
+  border: 1px solid #2aa52a;
+  border-radius: 5px;
+  color: white;
+  background: #2aa52a;
   cursor: pointer;
+}
+
+.buttons button.detailSee {
+  color: white;
+  background: #2aa52a;
 }
 
 .recipe-table {
@@ -114,24 +119,18 @@ input[type="checkbox"].check {
 
 .recipe-table th,
 .recipe-table td {
-  padding: 30px;
+  padding: 20px;
   text-align: center;
   border-bottom: 1px solid #eee;
-  font-size: 16px;
+  font-size: 15px;
 }
 
-.buttons button {
-  margin: 0 5px;
+.trade-table td button {
   padding: 6px 10px;
-  font-size: 16px;
+  font-size: 14px;
   border: 1px solid #2aa52a;
   border-radius: 5px;
-  color: #2aa52a;
-  background: white;
-  cursor: pointer;
-}
-
-.buttons button.detailSee {
   color: white;
   background: #2aa52a;
+  cursor: pointer;
 }

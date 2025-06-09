@@ -93,80 +93,82 @@ export default function BlockedUserList() {
 
   return (
     <div className="user-list-container">
-      <h2>차단된 사용자 리스트</h2>
-
-      <table className="user-table">
-        <thead>
-          <tr>
-            <th>번호</th>
-            <th>이름</th>
-            <th>아이디</th>
-            <th>작업</th>
-          </tr>
-        </thead>
-        <tbody>
-          {blockedUsers.map((user) => (
-            <tr key={user.id}>
-              <td>{user.number}</td>
-              <td>{user.name}</td>
-              <td>{user.username}</td>
-              <td className="buttons">
-                <button className="block" onClick={() => handleUnblockClick(user)}>
-                  해제
-                </button>
-                <button className="reason" onClick={() => handleShowReason(user.id)}>
-                  사유
-                </button>
-              </td>
+      <div className="white-box">
+        <h2>차단된 사용자 리스트</h2>
+        <hr className="user-divider" />
+        <table className="user-table">
+          <thead>
+            <tr>
+              <th>번호</th>
+              <th>이름</th>
+              <th>아이디</th>
+              <th>작업</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {blockedUsers.map((user) => (
+              <tr key={user.id}>
+                <td>{user.number}</td>
+                <td>{user.name}</td>
+                <td>{user.username}</td>
+                <td className="buttons">
+                  <button className="block" onClick={() => handleUnblockClick(user)}>
+                    해제
+                  </button>
+                  <button className="reason" onClick={() => handleShowReason(user.id)}>
+                    사유
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-      <div className="pagination">
-        <span>{"<"}</span>
-        <span className="active">1</span>
-        <span>{">"}</span>
+        <div className="pagination">
+          <span>{"<"}</span>
+          <span className="active">1</span>
+          <span>{">"}</span>
+        </div>
+
+        {showReasonModal && selectedReason && (
+          <div className="modal-overlay">
+            <div className="modal-box">
+              <p>
+                <strong>차단 사유:</strong>
+              </p>
+              <textarea value={selectedReason.reason} readOnly className="readonly-textarea" />
+              <p>관리자: {selectedReason.blockedBy}</p>
+              <p>
+                일시:{" "}
+                {selectedReason.blockedAt
+                  ? new Date(selectedReason.blockedAt).toLocaleString()
+                  : "알 수 없음"}
+              </p>
+              <div className="modal-buttons">
+                <button className="confirm" onClick={handleCloseReasonModal}>
+                  확인
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showUnblockModal && (
+          <div className="modal-overlay">
+            <div className="modal-box">
+              <p>회원을 차단 해제하시겠습니까?</p>
+              <div className="modal-buttons">
+                <button className="confirm" onClick={confirmUnblock}>
+                  확인
+                </button>
+                <button className="cancel" onClick={cancelUnblock}>
+                  취소
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-
-      {showReasonModal && selectedReason && (
-        <div className="modal-overlay">
-          <div className="modal-box">
-            <p>
-              <strong>차단 사유:</strong>
-            </p>
-            <textarea value={selectedReason.reason} readOnly className="readonly-textarea" />
-            <p>관리자: {selectedReason.blockedBy}</p>
-            <p>
-              일시:{" "}
-              {selectedReason.blockedAt
-                ? new Date(selectedReason.blockedAt).toLocaleString()
-                : "알 수 없음"}
-            </p>
-            <div className="modal-buttons">
-              <button className="confirm" onClick={handleCloseReasonModal}>
-                확인
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showUnblockModal && (
-        <div className="modal-overlay">
-          <div className="modal-box">
-            <p>회원을 차단 해제하시겠습니까?</p>
-            <div className="modal-buttons">
-              <button className="confirm" onClick={confirmUnblock}>
-                확인
-              </button>
-              <button className="cancel" onClick={cancelUnblock}>
-                취소
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

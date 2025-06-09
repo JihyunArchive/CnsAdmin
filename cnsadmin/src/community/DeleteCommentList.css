@@ -78,6 +78,22 @@ input[type="checkbox"].check {
   color: #aaa;
 }
 
+.buttons button {
+  margin: 0 5px;
+  padding: 6px 10px;
+  font-size: 16px;
+  border: 1px solid #2aa52a;
+  border-radius: 5px;
+  color: #2aa52a;
+  background: white;
+  cursor: pointer;
+}
+
+.buttons button.detailSee {
+  color: white;
+  background: #2aa52a;
+}
+
 .dcomment-table {
   width: 100%;
   border-collapse: collapse;
@@ -95,26 +111,9 @@ input[type="checkbox"].check {
 }
 
 .dcomment-table th,
-.dcomment-table td {
-  padding: 30px;
+.dcomment-table td  {
+  padding: 20px;
   text-align: center;
   border-bottom: 1px solid #eee;
-  font-size: 16px;
+  font-size: 15px;
 }
-
-.buttons button {
-  margin: 0 5px;
-  padding: 6px 10px;
-  font-size: 16px;
-  border: 1px solid #2aa52a;
-  border-radius: 5px;
-  color: #2aa52a;
-  background: white;
-  cursor: pointer;
-}
-
-.buttons button.detailSee {
-  color: white;
-  background: #2aa52a;
-}
-

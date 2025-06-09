@@ -11,8 +11,9 @@ body {
 }
 
 .user-recipe-container h2 {
-    font-size: 20px;
-    margin-bottom: 20px;
+  margin-bottom: 20px;
+  font-size: 20px;
+  margin-left: 20px;
 }
 
 /* 🔍 검색바 */
@@ -42,23 +43,27 @@ body {
 
 /* 📋 테이블 */
 .recipe-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  margin-top: 10px;
+  margin-bottom: 70px;
+}
+
+.recipe-table thead tr {
+  background-color: #f3f5f7;
+}
+
+.recipe-table thead th {
+  color: #757575;
 }
 
 .recipe-table th,
 .recipe-table td {
-    padding: 12px;
-    text-align: center;
-    border-bottom: 1px solid #eee;
-    font-size: 14px;
-}
-
-.recipe-table th {
-    background-color: #f0f0f0;
-    font-weight: bold;
-    color: #333;
+  padding: 20px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  font-size: 15px;
 }
 
 /* 👁 보기 버튼 */

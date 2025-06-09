@@ -15,6 +15,7 @@ body {
 .user-list-container h2 {
     font-size: 20px;
     margin-bottom: 20px;
+    margin-left: 20px;
 }
 
 /* 상단 바 - 검색/체크박스/버튼 정렬 */
@@ -52,24 +53,34 @@ body {
     background-color: #2aa52a;
     color: white;
 }
-
+/* 
+.user-table th {
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+ */
 .user-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-    margin-top: 10px;
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  margin-top: 10px;
+  margin-bottom: 70px;
+}
+
+.user-table thead tr {
+  background-color: #f3f5f7;
+}
+
+.user-table thead th {
+  color: #757575;
 }
 
 .user-table th,
 .user-table td {
-    padding: 12px;
-    text-align: center;
-    border-bottom: 1px solid #eee;
-}
-
-.user-table th {
-    background-color: #f0f0f0;
-    font-weight: bold;
+  padding: 20px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  font-size: 15px;
 }
 
 /* 상세보기/해제 버튼 */

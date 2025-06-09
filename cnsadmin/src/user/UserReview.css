@@ -6,17 +6,17 @@
 }
 
 .user-review-container h2 {
-    font-size: 20px;
-    margin-bottom: 20px;
+  margin-bottom: 20px;
+  font-size: 20px;
+  margin-left: 20px;
 }
 
 /* 탭 */
 .review-tab {
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    margin: 30px 0 20px 0;
-    border-bottom: 2px solid #ccc;
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin: 30px 0 20px 0;
 }
 
 .review-tab button {
@@ -39,25 +39,34 @@
 }
 
 /* 테이블 */
-.review-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-    table-layout: fixed;
-}
-
-.review-table th,
-.review-table td {
-    padding: 12px;
-    text-align: center;
-    border-bottom: 1px solid #eee;
-    font-size: 14px;
-}
-
-.review-table th {
+/* .review-table th {
     background-color: #f0f0f0;
     font-weight: bold;
     color: #333;
+}
+ */
+.review-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  margin-top: 10px;
+  margin-bottom: 70px;
+}
+
+.review-table thead tr {
+  background-color: #f3f5f7;
+}
+
+.review-table thead th {
+  color: #757575;
+}
+
+.review-table th,
+.review-table td  {
+  padding: 20px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  font-size: 15px;
 }
 
 /* 페이지네이션 */

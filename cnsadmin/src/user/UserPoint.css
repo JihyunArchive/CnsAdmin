@@ -6,8 +6,9 @@
 }
 
 .user-point-container h2 {
-  font-size: 20px;
   margin-bottom: 20px;
+  font-size: 20px;
+  margin-left: 20px;
 }
 
 .point-tab {
@@ -15,7 +16,6 @@
   justify-content: center;
   gap: 60px;
   margin: 30px 0 20px 0;
-  border-bottom: 2px solid #ccc;
 }
 
 .point-tab button {
@@ -39,25 +39,35 @@
 
 
 /* 포인트 테이블 */
+
+/* .point-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+  color: #333;
+} */
+
 .point-table {
   width: 100%;
   border-collapse: collapse;
   background-color: white;
-  table-layout: fixed;
+  margin-top: 10px;
+  margin-bottom: 70px;
+}
+
+.point-table thead tr {
+  background-color: #f3f5f7;
+}
+
+.point-table thead th {
+  color: #757575;
 }
 
 .point-table th,
-.point-table td {
-  padding: 12px;
+.point-table td  {
+  padding: 20px;
   text-align: center;
   border-bottom: 1px solid #eee;
-  font-size: 14px;
-}
-
-.point-table th {
-  background-color: #f0f0f0;
-  font-weight: bold;
-  color: #333;
+  font-size: 15px;
 }
 
 /* 하단 페이지네이션 */

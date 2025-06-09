@@ -85,27 +85,6 @@
   cursor: pointer;
 }
 
-.comment-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: white;
-  margin-top: 10px;
-  margin-bottom: 70px;
-}
-
-.comment-table thead tr {
-  background-color: #f3f5f7;
-}
-
-.comment-table th,
-.comment-table td {
-  padding: 30px;
-  text-align: center;
-  border-bottom: 1px solid #eee;
-  font-size: 16px;
-  color: #333;
-}
-
 .buttons button {
   margin: 0 5px;
   padding: 6px 10px;
@@ -123,4 +102,28 @@
 .buttons button.detailSee {
   color: white;
   background: #2aa52a;
+}
+
+.comment-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  margin-top: 10px;
+  margin-bottom: 70px;
+}
+
+.comment-table thead tr {
+  background-color: #f3f5f7;
+}
+
+.comment-table thead th {
+  color: #757575;
+}
+
+.comment-table th,
+.comment-table td {
+  padding: 20px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  font-size: 15px;
 }

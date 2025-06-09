@@ -39,39 +39,41 @@ export default function UserPoint() {
 
   return (
     <div className="user-point-container">
-      <h2>포인트 내역</h2>
+      <div className="white-box">
+        <h2>포인트 내역</h2>
 
-      <div className="point-tab">
-        <button className={tab === "saved" ? "active" : ""} onClick={() => setTab("saved")}>적립</button>
-        <button className={tab === "used" ? "active" : ""} onClick={() => setTab("used")}>사용</button>
-      </div>
+        <div className="point-tab">
+          <button className={tab === "saved" ? "active" : ""} onClick={() => setTab("saved")}>적립</button>
+          <button className={tab === "used" ? "active" : ""} onClick={() => setTab("used")}>사용</button>
+        </div>
 
-      <table className="point-table">
-        <thead>
-          <tr>
-            <th>번호</th>
-            <th>유형</th>
-            <th>{tab === "saved" ? "적립 포인트" : "사용 포인트"}</th>
-            <th>{tab === "saved" ? "적립날짜" : "사용날짜"}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {points.map((item) => (
-            <tr key={item.id}>
-              <td>{item.number}</td>
-              <td>{item.type}</td>
-              <td>{item.point}</td>
-              <td>{item.date}</td>
+        <table className="point-table">
+          <thead>
+            <tr>
+              <th>번호</th>
+              <th>유형</th>
+              <th>{tab === "saved" ? "적립 포인트" : "사용 포인트"}</th>
+              <th>{tab === "saved" ? "적립날짜" : "사용날짜"}</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {points.map((item) => (
+              <tr key={item.id}>
+                <td>{item.number}</td>
+                <td>{item.type}</td>
+                <td>{item.point}</td>
+                <td>{item.date}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-      <div className="pagination">
-        <span>{"<"}</span>
-        <span className="active">1</span>
-        <span>1</span>
-        <span>{">"}</span>
+        <div className="pagination">
+          <span>{"<"}</span>
+          <span className="active">1</span>
+          <span>1</span>
+          <span>{">"}</span>
+        </div>
       </div>
     </div>
   );

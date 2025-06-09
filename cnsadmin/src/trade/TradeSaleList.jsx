@@ -165,6 +165,8 @@ export default function TradeSaleList() {
           </div>
         </div>
 
+        <hr className="trade-divider" />
+        
         <div className="top-bar">
           <div className="checkbox-group">
             <input
