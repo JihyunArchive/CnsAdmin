@@ -154,25 +154,31 @@ export default function Main() {
         </div>
 
         {/* 인기 커뮤니티 */}
-        <div className="box">
-          <h3>커뮤니티</h3>
-          {popularBoards.length === 0 ? (
-            <div>로딩 중...</div>
-          ) : (
-            popularBoards.map((board, i) => (
-              <div key={i} className="card">
-                <img src="/assets/sample.png" alt="board" />
-                <div>
-                  {/* 제목 제거하고, 내용 표시 */}
-                  <div className="card-content">{board.content}</div>
-                  <div className="card-info">
-                    {board.username ?? "작성자 없음"} |{" "}
-                    {board.createdAt?.substring(5, 16).replace("T", " ") ?? "날짜 없음"}
+          <div className="box">
+            <h3>커뮤니티</h3>
+            {popularBoards.length === 0 ? (
+              <div>로딩 중...</div>
+            ) : (
+              popularBoards.map((board, i) => (
+                <div key={i} className="card">
+                  <img
+                    src={board.imageUrls?.length > 0 ? `${BASE_URL}${board.imageUrls[0]}` : "/assets/sample.png"}
+                    alt="board"
+                  />
+                  <div>
+                    <div className="card-content">
+                      {board.content?.length > 100
+                        ? board.content.substring(0, 100) + "..."
+                        : board.content || "(내용 없음)"}
+                    </div>
+                    <div className="card-info">
+                      {board.writer ?? "작성자 없음"} |{" "}
+                      {board.createdAt?.substring(5, 16).replace("T", " ") ?? "날짜 없음"}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
-          )}
+              ))
+            )}
         </div>
       </div>
     </div>
