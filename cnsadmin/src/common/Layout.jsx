@@ -62,6 +62,13 @@ export default function Layout({ setIsLoggedIn }) {
               <Link to="/recipe/stats">레시피 통계</Link> 
             </div>
           </div>
+          <div className="nav-item">
+            <a href="#">재료 관리</a>
+            <div className="submenu">
+              <Link to="/material">재료 관리</Link>
+              <Link to="/dmaterial">삭제된 재료</Link>
+            </div>
+          </div>
         </div>
 
         <div className="logout" onClick={handleLogout}>로그아웃</div>

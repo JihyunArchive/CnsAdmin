@@ -36,6 +36,11 @@ import TradeDetail from "./trade/TradeDetail";
 import UserRecipeDetail from "./user/UserRecipeDetail";
 import UserHistoryPurchase from "./user/UserHistoryPurchase";
 import UserHistorySale from "./user/UserHistorySale";
+import Material from "./material/Material";
+import MaterialCreate from "./material/MaterialCreate";
+import MaterialModify from "./material/MaterialModify";
+import DeleteMaterialList from "./material/DeleteMaterialList";
+
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -100,8 +105,13 @@ export default function App() {
               <Route path="admin/user-history/purchase/:tradePostId" element={<UserHistoryPurchase />} />
               <Route path="admin/user-history/sale/:tradePostId" element={<UserHistorySale />} />
               <Route path="admin/user-history/:userId" element={<UserHistory />} />
+              <Route path="material" element={<Material />} />
+              <Route path="material/:materialId" element={<MaterialCreate />} />
+              <Route path="/material/modify/:id" element={<MaterialModify />} />
+              <Route path="dmaterial" element={<DeleteMaterialList />} />
             </Route>
             <Route path="/login" element={<Navigate to="/" replace />} />
+
           </>
         )}
       </Routes>
