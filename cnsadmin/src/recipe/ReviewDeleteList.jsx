@@ -72,7 +72,7 @@ export default function ReviewDeleteList() {
             />
           </div>
           <div className="search-box">
-            <input type="text" placeholder="리뷰 검색 (미구현)" />
+            <input type="text" placeholder="리뷰 검색" />
             <span className="search-icon">🔍</span>
           </div>
         </div>
