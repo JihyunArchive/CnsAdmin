@@ -72,7 +72,7 @@ export default function DeletePostList() {
             />
           </div>
           <div className="search-box">
-            <input type="text" placeholder="게시물 검색 (미구현)" />
+            <input type="text" placeholder="게시물 검색" />
             <span className="search-icon">🔍</span>
           </div>
         </div>

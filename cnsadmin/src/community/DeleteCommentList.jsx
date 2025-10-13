@@ -72,7 +72,7 @@ export default function DeleteCommentList() {
             />
           </div>
           <div className="search-box">
-            <input type="text" placeholder="댓글 검색 (미구현)" />
+            <input type="text" placeholder="댓글 검색" />
             <span className="search-icon">🔍</span>
           </div>
         </div>
