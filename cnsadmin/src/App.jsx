@@ -40,7 +40,7 @@ import Material from "./material/Material";
 import MaterialCreate from "./material/MaterialCreate";
 import MaterialModify from "./material/MaterialModify";
 import DeleteMaterialList from "./material/DeleteMaterialList";
-
+import TradePostStats from "./stats/TradePostStats";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -109,9 +109,10 @@ export default function App() {
               <Route path="material/:materialId" element={<MaterialCreate />} />
               <Route path="/material/modify/:id" element={<MaterialModify />} />
               <Route path="dmaterial" element={<DeleteMaterialList />} />
+              <Route path="/trade/stats" element={<TradePostStats />} />
             </Route>
             <Route path="/login" element={<Navigate to="/" replace />} />
-
+            
           </>
         )}
       </Routes>

@@ -8,7 +8,7 @@ export default function Layout({ setIsLoggedIn }) {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setIsLoggedIn(false);  // 🔑 상태 변경
+    setIsLoggedIn(false);
     navigate("/login");
   };
 
@@ -30,6 +30,7 @@ export default function Layout({ setIsLoggedIn }) {
               <Link to="/users/blocked">차단된 사용자</Link>
             </div>
           </div>
+
           <div className="nav-item">
             <a href="#">레시피 관리</a>
             <div className="submenu">
@@ -38,17 +39,19 @@ export default function Layout({ setIsLoggedIn }) {
               <Link to="/rdeletes">리뷰 삭제 리스트</Link>
             </div>
           </div>
+
           <div className="nav-item">
             <a href="#">커뮤니티 관리</a>
             <div className="submenu">
-              <Link to="/posts">게시글</Link>  
-              <Link to="/dposts">게시글 삭제 리스트</Link>  
-              <Link to="/comments">댓글</Link>  
-              <Link to="/dcomments">댓글 삭제 리스트</Link>  
-              <Link to="/reports">신고내역</Link>  
-              <Link to="/dreports">댓글 신고내역 리스트</Link>  
+              <Link to="/posts">게시글</Link>
+              <Link to="/dposts">게시글 삭제 리스트</Link>
+              <Link to="/comments">댓글</Link>
+              <Link to="/dcomments">댓글 삭제 리스트</Link>
+              <Link to="/reports">신고내역</Link>
+              <Link to="/dreports">댓글 신고내역 리스트</Link>
             </div>
           </div>
+
           <div className="nav-item">
             <a href="#">동네주방 관리</a>
             <div className="submenu">
@@ -56,12 +59,16 @@ export default function Layout({ setIsLoggedIn }) {
               <Link to="/trade/report">신고관리</Link>
             </div>
           </div>
+
           <div className="nav-item">
             <a href="#">통계 관리</a>
             <div className="submenu">
-              <Link to="/recipe/stats">레시피 통계</Link> 
+              <Link to="/recipe/stats">레시피 통계</Link>
+              {/* ✅ 거래글 통계 추가 */}
+              <Link to="/trade/stats">거래글 통계</Link>
             </div>
           </div>
+
           <div className="nav-item">
             <a href="#">재료 관리</a>
             <div className="submenu">
