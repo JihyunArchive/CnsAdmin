@@ -13,6 +13,7 @@ export default function Material() {
     if (saved) {
       try { return JSON.parse(saved); } catch {}
     }
+    return [];
   });
 
   const [checkedItems, setCheckedItems] = useState([]);
@@ -178,7 +179,7 @@ export default function Material() {
                   return;
                 }
                 const id = checkedItems[0];
-                navigate(`/material/modify/${id}`);
+                navigate(`/materials/modify/${id}`);
               }}
             >
               수정

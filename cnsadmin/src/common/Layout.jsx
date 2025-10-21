@@ -72,8 +72,8 @@ export default function Layout({ setIsLoggedIn }) {
           <div className="nav-item">
             <a href="#">재료 관리</a>
             <div className="submenu">
-              <Link to="/material">재료 관리</Link>
-              <Link to="/dmaterial">삭제된 재료</Link>
+              <Link to="/materials">재료 관리</Link>
+              <Link to="/dmaterials">삭제된 재료</Link>
             </div>
           </div>
         </div>

@@ -105,10 +105,10 @@ export default function App() {
               <Route path="admin/user-history/purchase/:tradePostId" element={<UserHistoryPurchase />} />
               <Route path="admin/user-history/sale/:tradePostId" element={<UserHistorySale />} />
               <Route path="admin/user-history/:userId" element={<UserHistory />} />
-              <Route path="material" element={<Material />} />
-              <Route path="material/:materialId" element={<MaterialCreate />} />
-              <Route path="/material/modify/:id" element={<MaterialModify />} />
-              <Route path="dmaterial" element={<DeleteMaterialList />} />
+              <Route path="materials" element={<Material />} />
+              <Route path="materials/:materialId" element={<MaterialCreate />} />
+              <Route path="/materials/modify/:id" element={<MaterialModify />} />
+              <Route path="dmaterials" element={<DeleteMaterialList />} />
               <Route path="/trade/stats" element={<TradePostStats />} />
             </Route>
             <Route path="/login" element={<Navigate to="/" replace />} />

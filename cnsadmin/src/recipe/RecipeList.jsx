@@ -92,7 +92,7 @@ export default function RecipeList() {
     try {
       if (selectedRecipe) {
         await api.delete(`/admin/recipes/${selectedRecipe.recipeId}`, {
-          data: { reason: deleteReason },
+          params: { reason: deleteReason },
         });
       } else {
         for (const id of checkedItems) {
