@@ -134,7 +134,7 @@ export default function Main() {
             popularTrades.map((trade, i) => (
               <div key={i} className="card">
                 <img
-                  src={trade.imageUrl ? `${BASE_URL}${trade.imageUrl}` : "/assets/sample.png"}
+                  src={trade.firstImageUrl ? `${BASE_URL}${trade.firstImageUrl}` : "/assets/sample.png"}
                   alt="trade"
                 />
                 <div>
