@@ -8,6 +8,12 @@ const TRASH_KEY   = "admin_materials_deleted_v1";
 export default function Material() {
   const navigate = useNavigate();
 
+  const INITIAL_MATERIALS = [
+  { id: 1, name: "당근", category: "채소", unit: "개", icon: "🥕" },
+  { id: 2, name: "양파", category: "채소", unit: "개", icon: "🧅" },
+  { id: 3, name: "오징어", category: "해산물", unit: "마리", icon: "🦑" },
+];
+
   const [materials, setMaterials] = useState(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
@@ -160,7 +166,7 @@ export default function Material() {
           <div className="create-button-wrapper">
             <button
               className="top-create-button"
-              onClick={() => navigate("/material/new")}
+              onClick={() => navigate("/materials/new")}
             >
               생성
             </button>
