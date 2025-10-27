@@ -214,49 +214,8 @@ export default function Material() {
             </div>
           </div>
 
-<<<<<<< HEAD
-          <div className="create-button-wrapper">
-            <button
-              className="top-create-button"
-              onClick={() => navigate("/materials/new")}
-            >
-              생성
-            </button>
-          </div>
-
-          <div className="modify-button-wrapper">
-            <button
-              className="top-modify-button"
-              onClick={() => {
-                if (checkedItems.length === 0) {
-                  alert("수정할 재료를 선택해주세요.");
-                  return;
-                }
-                if (checkedItems.length > 1) {
-                  alert("한 번에 하나의 재료만 수정할 수 있습니다.");
-                  return;
-                }
-                const id = checkedItems[0];
-                navigate(`/materials/modify/${id}`);
-              }}
-            >
-              수정
-            </button>
-          </div>
-
-          <div className="delete-button-wrapper">
-            <button className="top-delete-button" onClick={openDeleteModal}>
-              삭제
-            </button>
-          </div>
-        </div>
-
-        <table className="material-table">
-          <thead>
-=======
           <table className="material-table">
             <thead>
->>>>>>> 429b2fd7fdcf422f523b3e0f13b6e5971ac525e7
             <tr>
               <th></th>
               <th>번호</th>
