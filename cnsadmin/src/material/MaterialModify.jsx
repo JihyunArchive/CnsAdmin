@@ -1,19 +1,11 @@
-// MaterialModify.jsx
+// src/material/MaterialModify.jsx
 import React, { useEffect, useRef, useState } from "react";
 import "./MaterialModify.css";
 import { useNavigate, useParams } from "react-router-dom";
+import api from "../api/axiosInstance";
+import { toIconUrl } from "../utils/url";
 
-const STORAGE_KEY = "admin_materials_v1";
-
-function readFileAsDataUrl(file) {
-  return new Promise((resolve, reject) => {
-    const fr = new FileReader();
-    fr.onload = () => resolve(fr.result);
-    fr.onerror = reject;
-    fr.readAsDataURL(file);
-  });
-}
-
+// ✅ 공용 커스텀 셀렉트 (기존 유지)
 function CustomSelect({ value, options, onChange, placeholder = "선택", width = "100%" }) {
   const [open, setOpen] = useState(false);
   const [highlight, setHighlight] = useState(-1);
@@ -55,145 +47,130 @@ function CustomSelect({ value, options, onChange, placeholder = "선택", width 
   };
 
   return (
-    <div className="cs-wrap" style={{ width }} ref={wrapRef} role="combobox" aria-expanded={open} aria-haspopup="listbox">
-      <button type="button" className="cs-button" onClick={() => setOpen((v) => !v)} onKeyDown={onKeyDown} aria-label="옵션 선택">
+      <div className="cs-wrap" style={{ width }} ref={wrapRef} role="combobox" aria-expanded={open} aria-haspopup="listbox">
+        <button type="button" className="cs-button" onClick={() => setOpen((v) => !v)} onKeyDown={onKeyDown} aria-label="옵션 선택">
         <span className="cs-content">
           <span className={`cs-label ${!value ? "cs-placeholder" : ""}`}>{currentLabel}</span>
           <svg className="cs-arrow" width="18" height="18" viewBox="0 0 24 24">
             <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />
           </svg>
         </span>
-      </button>
+        </button>
 
-      {open && (
-        <ul className="cs-list" role="listbox">
-          {options.map((opt, idx) => (
-            <li
-              key={opt}
-              role="option"
-              aria-selected={value === opt}
-              className={`cs-option ${value === opt ? "selected" : ""} ${idx === highlight ? "highlight" : ""}`}
-              onMouseEnter={() => setHighlight(idx)}
-              onMouseDown={(e) => {
-                e.preventDefault();
-                onChange(opt);
-                setOpen(false);
-              }}
-            >
-              {opt}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+        {open && (
+            <ul className="cs-list" role="listbox">
+              {options.map((opt, idx) => (
+                  <li
+                      key={opt}
+                      role="option"
+                      aria-selected={value === opt}
+                      className={`cs-option ${value === opt ? "selected" : ""} ${idx === highlight ? "highlight" : ""}`}
+                      onMouseEnter={() => setHighlight(idx)}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        onChange(opt);
+                        setOpen(false);
+                      }}
+                  >
+                    {opt}
+                  </li>
+              ))}
+            </ul>
+        )}
+      </div>
   );
 }
 
 export default function MaterialModify() {
   const navigate = useNavigate();
-  const { id } = useParams();                
+  const { id } = useParams();
   const numericId = Number(id);
 
-  const [name, setName] = useState("");
+  // ✅ 상태
+  const [nameKo, setNameKo] = useState("");
   const [category, setCategory] = useState("");
-  const [unit, setUnit] = useState("");
-  const [iconUrl, setIconUrl] = useState(null); 
-  const [emojiIcon, setEmojiIcon] = useState(""); 
+  const [defaultUnitId, setDefaultUnitId] = useState(null);
+  const [iconUrl, setIconUrl] = useState(null);
   const [iconFile, setIconFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
 
-  const categoryOptions = [
-    "채소류", "육류", "해산물", "곡류", "과일류", "유제품",
-    "양념류", "가공식품", "면류", "기타", "김치 종류", "음료 종류",
-  ];
-  const unitOptions = ["개", "mL", "L", "g", "kg"];
+  const [unitOptions, setUnitOptions] = useState([]);
+  const [categoryOptions, setCategoryOptions] = useState([]);
 
+  // ✅ 단위/카테고리 + 상세정보 불러오기
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    const found = saved.find((m) => m.id === numericId);
-    if (!found) {
-      alert("해당 재료를 찾을 수 없습니다.");
-      navigate("/material");
-      return;
-    }
+    (async () => {
+      try {
+        const [unitRes, catRes, detailRes] = await Promise.all([
+          api.get("/admin/units"),
+          api.get("/admin/ingredients/categories"),
+          api.get(`/admin/ingredients/${numericId}`),
+        ]);
 
-    setName(found.name || "");
-    setCategory(found.category || "");
-    setUnit(found.unit || "");
-    setIconUrl(found.iconUrl || null);
-    setEmojiIcon(found.icon || ""); 
-    setPreviewUrl(found.iconUrl || null); 
+        setUnitOptions(unitRes.data.map((u) => ({ id: u.id, name: u.name })));
+        setCategoryOptions(catRes.data);
+
+        const d = detailRes.data;
+        setNameKo(d.nameKo || "");
+        setCategory(d.category || "");
+        setDefaultUnitId(d.defaultUnitId || null);
+        setIconUrl(d.iconUrl || null);
+        setPreviewUrl(d.iconUrl ? toIconUrl(d.iconUrl) : null);
+      } catch (e) {
+        console.error(e);
+        alert("재료 정보를 불러오지 못했습니다.");
+        navigate("/materials");
+      }
+    })();
   }, [numericId, navigate]);
 
+  // ✅ 파일 미리보기
   const handleFileChange = (e) => {
     const file = e.target.files?.[0] || null;
     setIconFile(file);
-    setPreviewUrl(file ? URL.createObjectURL(file) : iconUrl || null);
+    setPreviewUrl(file ? URL.createObjectURL(file) : iconUrl ? toIconUrl(iconUrl) : null);
   };
 
+  // ✅ 저장 (PUT /api/admin/ingredients/{id})
   const handleSave = async () => {
-    if (!name.trim()) {
-      alert("이름을 입력해주세요.");
-      return;
-    }
-    if (!category) {
-      alert("카테고리를 선택해주세요.");
-      return;
-    }
-    if (!unit) {
-      alert("단위를 선택해주세요.");
-      return;
-    }
+    if (!nameKo.trim()) return alert("이름을 입력해주세요.");
+    if (!category) return alert("카테고리를 선택해주세요.");
+    if (!defaultUnitId) return alert("단위를 선택해주세요.");
 
     try {
-      const list = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      // 아이콘 파일은 업로드 서버 없으면 base64로 임시 저장 가능
+      // 지금은 파일 업로드 로직 없으므로 iconUrl 그대로 사용
+      const dto = {
+        nameKo: nameKo.trim(),
+        category,
+        defaultUnitId,
+        iconUrl,
+      };
 
-      let nextIconUrl = iconUrl;
-      if (iconFile) {
-        nextIconUrl = await readFileAsDataUrl(iconFile);
-      }
-
-      const updated = list.map((m) =>
-        m.id === numericId
-          ? {
-              ...m,
-              name: name.trim(),
-              category,
-              unit,
-              iconUrl: nextIconUrl || null,
-              icon: nextIconUrl ? undefined : (emojiIcon || m.icon),
-            }
-          : m
-      );
-
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      alert("수정되었습니다.");
-      navigate("/material");
+      await api.put(`/api/admin/ingredients/${numericId}`, dto);
+      alert("수정이 완료되었습니다.");
+      navigate("/materials");
     } catch (e) {
       console.error(e);
-      alert("수정 중 문제가 발생했습니다.");
+      alert("수정 중 오류가 발생했습니다.");
     }
   };
 
   return (
-    <div className="material-detail-container">
-      <div className="white-box">
-        <h2>재료 수정</h2>
-        <hr className="detail-divider" />
+      <div className="material-detail-container">
+        <div className="white-box">
+          <h2>재료 수정</h2>
+          <hr className="detail-divider" />
 
-        <table className="detail-table">
-          <tbody>
+          <table className="detail-table">
+            <tbody>
             <tr>
               <th>아이콘</th>
               <td className="icon-td">
                 <input type="file" accept="image/*" onChange={handleFileChange} />
-                {previewUrl ? (
-                  <img src={previewUrl} alt="icon preview" className="icon-preview" />
-                ) : emojiIcon ? (
-                  <span style={{ fontSize: 28, display: "inline-block", marginLeft: 12 }}>
-                    {emojiIcon}
-                  </span>
-                ) : null}
+                {previewUrl && (
+                    <img src={previewUrl} alt="icon preview" className="icon-preview" />
+                )}
               </td>
             </tr>
 
@@ -208,11 +185,11 @@ export default function MaterialModify() {
               <th>이름</th>
               <td>
                 <input
-                  className="inline-input"
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="재료 이름 입력"
+                    className="inline-input"
+                    type="text"
+                    value={nameKo}
+                    onChange={(e) => setNameKo(e.target.value)}
+                    placeholder="재료 이름 입력"
                 />
               </td>
             </tr>
@@ -220,21 +197,30 @@ export default function MaterialModify() {
             <tr>
               <th>단위</th>
               <td>
-                <CustomSelect value={unit} options={unitOptions} onChange={setUnit} />
+                <CustomSelect
+                    value={
+                        unitOptions.find((u) => u.id === defaultUnitId)?.name || ""
+                    }
+                    options={unitOptions.map((u) => u.name)}
+                    onChange={(selected) => {
+                      const match = unitOptions.find((u) => u.name === selected);
+                      setDefaultUnitId(match ? match.id : null);
+                    }}
+                />
               </td>
             </tr>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
 
-        <div className="submit-bar">
-          <button type="button" className="top-register-button" onClick={handleSave}>
-            저장
-          </button>
-          <button type="button" className="top-cancel-button" onClick={() => navigate("/material")}>
-            취소
-          </button>
+          <div className="submit-bar">
+            <button type="button" className="top-register-button" onClick={handleSave}>
+              저장
+            </button>
+            <button type="button" className="top-cancel-button" onClick={() => navigate("/materials")}>
+              취소
+            </button>
+          </div>
         </div>
       </div>
-    </div>
   );
 }
