@@ -8,25 +8,9 @@ import {toIconUrl} from "../utils/url";
 export default function Material() {
   const navigate = useNavigate();
 
-<<<<<<< HEAD
-  const INITIAL_MATERIALS = [
-  { id: 1, name: "당근", category: "채소", unit: "개", icon: "🥕" },
-  { id: 2, name: "양파", category: "채소", unit: "개", icon: "🧅" },
-  { id: 3, name: "오징어", category: "해산물", unit: "마리", icon: "🦑" },
-];
-
-  const [materials, setMaterials] = useState(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try { return JSON.parse(saved); } catch {}
-    }
-    return [];
-  });
-=======
   // 서버 데이터
   const [materials, setMaterials] = useState([]);     // IngredientMasterResponse[]
   const [unitsMap, setUnitsMap] = useState({});       // { [unitId]: unitName }
->>>>>>> 429b2fd7fdcf422f523b3e0f13b6e5971ac525e7
 
   // UI 상태
   const [checkedItems, setCheckedItems] = useState([]);
