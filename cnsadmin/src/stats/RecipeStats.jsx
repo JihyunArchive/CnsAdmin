@@ -16,8 +16,8 @@ export default function RecipeStats() {
   const [selectedCategory, setSelectedCategory] = useState("전체");
   const [summaryStats, setSummaryStats] = useState({ total: 0, average: 0, max: 0, min: 0 });
 
-  const tabList = ["날짜별", "카테고리별", "찜별", "추천별"];
-  const tabsWithDateFilter = ["날짜별", "찜별", "추천별"];
+  const tabList = ["날짜별", "카테고리별", "찜별"];
+  const tabsWithDateFilter = ["날짜별", "찜별"];
 
   const categoryEnumOrder = [
     "koreaFood",
@@ -28,7 +28,7 @@ export default function RecipeStats() {
     "snack",
     "alcoholSnack",
     "sideDish",
-    "etc"
+    "etc",
   ];
 
   const categoryLabelMap = {
@@ -44,7 +44,6 @@ export default function RecipeStats() {
   };
 
   const categoryList = ["전체", ...Object.values(categoryLabelMap)];
-
   const categoryMap = Object.fromEntries(Object.entries(categoryLabelMap).map(([eng, kor]) => [kor, eng]));
 
   const fetchStats = async () => {
@@ -53,21 +52,20 @@ export default function RecipeStats() {
       let endpoint = "/admin/stats/recipes";
 
       if (selectedTab === "찜별") endpoint += "/likes";
-      else if (selectedTab === "추천별") endpoint += "/recommends";
 
       if (tabsWithDateFilter.includes(selectedTab)) {
         if (dateFilterType === "기간" && startDate && endDate) {
           const diffDays = (endDate - startDate) / (1000 * 60 * 60 * 24);
 
-            if (diffDays > 60) {
-              response = await api.get(endpoint, {
-                params: {
-                  type: "MONTHLY",
-                  year: startDate.getFullYear(),
-                  month: startDate.getMonth() + 1, 
-                },
-              });
-            } else {
+          if (diffDays > 60) {
+            response = await api.get(endpoint, {
+              params: {
+                type: "MONTHLY",
+                year: startDate.getFullYear(),
+                month: startDate.getMonth() + 1,
+              },
+            });
+          } else {
             response = await api.get(endpoint, {
               params: {
                 type: "DAILY",
@@ -76,7 +74,7 @@ export default function RecipeStats() {
               },
             });
           }
-        }else if (dateFilterType === "연도") {
+        } else if (dateFilterType === "연도") {
           response = await api.get(endpoint, { params: { type: "YEARLY", year } });
         } else if (dateFilterType === "월") {
           response = await api.get(endpoint, { params: { type: "MONTHLY", year, month } });
@@ -96,12 +94,12 @@ export default function RecipeStats() {
             datasets: [
               {
                 label: "카테고리별 레시피 수",
-              data: counts,
-              borderColor: "#2aa52a",
-              backgroundColor: "rgba(42, 165, 42, 0.1)",
-              tension: 0.3,
-              pointBackgroundColor: "#2aa52a",
-              pointRadius: 5,
+                data: counts,
+                borderColor: "#2aa52a",
+                backgroundColor: "rgba(42, 165, 42, 0.1)",
+                tension: 0.3,
+                pointBackgroundColor: "#2aa52a",
+                pointRadius: 5,
               },
             ],
           });
@@ -113,7 +111,7 @@ export default function RecipeStats() {
             min: Math.min(...counts),
           });
 
-          return; // 조기 리턴
+          return; 
         } else {
           const englishCategory = categoryMap[selectedCategory] || null;
           const params = englishCategory ? { category: englishCategory } : {};
@@ -122,8 +120,8 @@ export default function RecipeStats() {
       }
 
       const rawData = response?.data;
-      const data = Array.isArray(rawData) ? rawData : rawData.data;
-      const summary = rawData.summary;
+      const data = Array.isArray(rawData) ? rawData : rawData?.data;
+      const summary = rawData?.summary;
 
       if (Array.isArray(data)) {
         const labels = data.map((item) => item.label || item.date || item.month);
@@ -160,6 +158,7 @@ export default function RecipeStats() {
 
   useEffect(() => {
     fetchStats();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTab, year, month, startDate, endDate, dateFilterType, selectedCategory]);
 
   return (
@@ -202,7 +201,9 @@ export default function RecipeStats() {
             {dateFilterType === "연도" && (
               <select value={year} onChange={(e) => setYear(Number(e.target.value))}>
                 {[2025, 2024, 2023, 2022, 2021].map((y) => (
-                  <option key={y} value={y}>{y}년</option>
+                  <option key={y} value={y}>
+                    {y}년
+                  </option>
                 ))}
               </select>
             )}
@@ -211,12 +212,16 @@ export default function RecipeStats() {
               <>
                 <select value={year} onChange={(e) => setYear(Number(e.target.value))}>
                   {[2025, 2024, 2023, 2022, 2021].map((y) => (
-                    <option key={y} value={y}>{y}년</option>
+                    <option key={y} value={y}>
+                      {y}년
+                    </option>
                   ))}
                 </select>
                 <select value={month} onChange={(e) => setMonth(Number(e.target.value))}>
                   {[...Array(12)].map((_, i) => (
-                    <option key={i + 1} value={i + 1}>{i + 1}월</option>
+                    <option key={i + 1} value={i + 1}>
+                      {i + 1}월
+                    </option>
                   ))}
                 </select>
               </>
@@ -229,7 +234,9 @@ export default function RecipeStats() {
           <div className="filter-box">
             <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
               {categoryList.map((category) => (
-                <option key={category} value={category}>{category}</option>
+                <option key={category} value={category}>
+                  {category}
+                </option>
               ))}
             </select>
             <button onClick={fetchStats}>조회</button>
@@ -249,7 +256,8 @@ export default function RecipeStats() {
         xAxisLabel={
           dateFilterType === "연도"
             ? "(연도)"
-            : dateFilterType === "월" || (startDate && endDate && (endDate - startDate) / (1000 * 60 * 60 * 24) > 60)
+            : dateFilterType === "월" ||
+              (startDate && endDate && (endDate - startDate) / (1000 * 60 * 60 * 24) > 60)
             ? "(월)"
             : "(일)"
         }
