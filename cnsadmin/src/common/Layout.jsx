@@ -60,20 +60,21 @@ export default function Layout({ setIsLoggedIn }) {
             </div>
           </div>
 
+          
+          <div className="nav-item">
+            <a href="#">재료 관리</a>
+            <div className="submenu">
+              <Link to="/materials">재료 관리</Link>
+              <Link to="/dmaterials">삭제된 재료</Link>
+            </div>
+          </div>
+
           <div className="nav-item">
             <a href="#">통계 관리</a>
             <div className="submenu">
               <Link to="/recipe/stats">레시피 통계</Link>
               {/* ✅ 거래글 통계 추가 */}
               <Link to="/trade/stats">거래글 통계</Link>
-            </div>
-          </div>
-
-          <div className="nav-item">
-            <a href="#">재료 관리</a>
-            <div className="submenu">
-              <Link to="/materials">재료 관리</Link>
-              <Link to="/dmaterials">삭제된 재료</Link>
             </div>
           </div>
         </div>
