@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axiosInstance";
 import ChartCard from "./ChartCard";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import "./RecipeStats.css";
 
 export default function RecipeStats() {
   const [selectedTab, setSelectedTab] = useState("날짜별");
-  const [dateFilterType, setDateFilterType] = useState("기간");
+  // 기본 필터는 연도별
+  const [dateFilterType, setDateFilterType] = useState("연도");
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth() + 1);
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [startDate, endDate] = dateRange;
+
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
   const [selectedCategory, setSelectedCategory] = useState("전체");
-  const [summaryStats, setSummaryStats] = useState({ total: 0, average: 0, max: 0, min: 0 });
+  const [summaryStats, setSummaryStats] = useState({
+    total: 0,
+    average: 0,
+    max: 0,
+    min: 0,
+  });
 
   const tabList = ["날짜별", "카테고리별", "찜별"];
-  const tabsWithDateFilter = ["날짜별", "찜별"];
+  const tabsWithDateFilter = ["날짜별", "찜별"]; 
 
   const categoryEnumOrder = [
     "koreaFood",
@@ -44,37 +47,18 @@ export default function RecipeStats() {
   };
 
   const categoryList = ["전체", ...Object.values(categoryLabelMap)];
-  const categoryMap = Object.fromEntries(Object.entries(categoryLabelMap).map(([eng, kor]) => [kor, eng]));
+  const categoryMap = Object.fromEntries(
+    Object.entries(categoryLabelMap).map(([eng, kor]) => [kor, eng])
+  );
 
   const fetchStats = async () => {
     try {
       let response;
       let endpoint = "/admin/stats/recipes";
-
       if (selectedTab === "찜별") endpoint += "/likes";
 
       if (tabsWithDateFilter.includes(selectedTab)) {
-        if (dateFilterType === "기간" && startDate && endDate) {
-          const diffDays = (endDate - startDate) / (1000 * 60 * 60 * 24);
-
-          if (diffDays > 60) {
-            response = await api.get(endpoint, {
-              params: {
-                type: "MONTHLY",
-                year: startDate.getFullYear(),
-                month: startDate.getMonth() + 1,
-              },
-            });
-          } else {
-            response = await api.get(endpoint, {
-              params: {
-                type: "DAILY",
-                start: startDate.toISOString().split("T")[0],
-                end: endDate.toISOString().split("T")[0],
-              },
-            });
-          }
-        } else if (dateFilterType === "연도") {
+        if (dateFilterType === "연도") {
           response = await api.get(endpoint, { params: { type: "YEARLY", year } });
         } else if (dateFilterType === "월") {
           response = await api.get(endpoint, { params: { type: "MONTHLY", year, month } });
@@ -110,8 +94,7 @@ export default function RecipeStats() {
             max: Math.max(...counts),
             min: Math.min(...counts),
           });
-
-          return; 
+          return;
         } else {
           const englishCategory = categoryMap[selectedCategory] || null;
           const params = englishCategory ? { category: englishCategory } : {};
@@ -145,7 +128,10 @@ export default function RecipeStats() {
         setSummaryStats(
           summary || {
             total: counts.reduce((a, b) => a + b, 0),
-            average: counts.length > 0 ? (counts.reduce((a, b) => a + b, 0) / counts.length).toFixed(2) : 0,
+            average:
+              counts.length > 0
+                ? (counts.reduce((a, b) => a + b, 0) / counts.length).toFixed(2)
+                : 0,
             max: Math.max(...counts, 0),
             min: Math.min(...counts, 0),
           }
@@ -159,7 +145,7 @@ export default function RecipeStats() {
   useEffect(() => {
     fetchStats();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedTab, year, month, startDate, endDate, dateFilterType, selectedCategory]);
+  }, [selectedTab, year, month, dateFilterType, selectedCategory]);
 
   return (
     <div className="recipe-stats-container">
@@ -180,13 +166,19 @@ export default function RecipeStats() {
 
         {tabsWithDateFilter.includes(selectedTab) && (
           <div className="filter-box">
-            <select value={dateFilterType} onChange={(e) => setDateFilterType(e.target.value)}>
+            <select
+              value={dateFilterType}
+              onChange={(e) => setDateFilterType(e.target.value)}
+            >
               <option value="연도">연도별</option>
               <option value="월">월별</option>
             </select>
 
             {dateFilterType === "연도" && (
-              <select value={year} onChange={(e) => setYear(Number(e.target.value))}>
+              <select
+                value={year}
+                onChange={(e) => setYear(Number(e.target.value))}
+              >
                 {[2025, 2024, 2023, 2022, 2021].map((y) => (
                   <option key={y} value={y}>
                     {y}년
@@ -197,14 +189,20 @@ export default function RecipeStats() {
 
             {dateFilterType === "월" && (
               <>
-                <select value={year} onChange={(e) => setYear(Number(e.target.value))}>
+                <select
+                  value={year}
+                  onChange={(e) => setYear(Number(e.target.value))}
+                >
                   {[2025, 2024, 2023, 2022, 2021].map((y) => (
                     <option key={y} value={y}>
                       {y}년
                     </option>
                   ))}
                 </select>
-                <select value={month} onChange={(e) => setMonth(Number(e.target.value))}>
+                <select
+                  value={month}
+                  onChange={(e) => setMonth(Number(e.target.value))}
+                >
                   {[...Array(12)].map((_, i) => (
                     <option key={i + 1} value={i + 1}>
                       {i + 1}월
@@ -219,7 +217,10 @@ export default function RecipeStats() {
 
         {selectedTab === "카테고리별" && (
           <div className="filter-box">
-            <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+            >
               {categoryList.map((category) => (
                 <option key={category} value={category}>
                   {category}
@@ -240,14 +241,7 @@ export default function RecipeStats() {
 
       <ChartCard
         chartData={chartData}
-        xAxisLabel={
-          dateFilterType === "연도"
-            ? "(연도)"
-            : dateFilterType === "월" ||
-              (startDate && endDate && (endDate - startDate) / (1000 * 60 * 60 * 24) > 60)
-            ? "(월)"
-            : "(일)"
-        }
+        xAxisLabel={dateFilterType === "연도" ? "(연도)" : "(월)"}
       />
     </div>
   );
