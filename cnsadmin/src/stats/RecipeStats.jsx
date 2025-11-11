@@ -181,22 +181,9 @@ export default function RecipeStats() {
         {tabsWithDateFilter.includes(selectedTab) && (
           <div className="filter-box">
             <select value={dateFilterType} onChange={(e) => setDateFilterType(e.target.value)}>
-              <option value="기간">기간 선택</option>
               <option value="연도">연도별</option>
               <option value="월">월별</option>
             </select>
-
-            {dateFilterType === "기간" && (
-              <DatePicker
-                selectsRange
-                startDate={startDate}
-                endDate={endDate}
-                onChange={(update) => setDateRange(update)}
-                dateFormat="yyyy-MM-dd"
-                placeholderText="날짜 선택"
-                isClearable
-              />
-            )}
 
             {dateFilterType === "연도" && (
               <select value={year} onChange={(e) => setYear(Number(e.target.value))}>
